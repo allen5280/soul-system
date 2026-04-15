@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOUL 成交對話系統 v1.0 | 陳柏維 × OMNI</title>
+<!-- 離線版：系統字型 fallback，無需網路 -->
+<style>
+:root{
+  --bg-0:#0a0a0f;
+  --bg-1:#12121a;
+  --bg-2:#1a1a26;
+  --bg-3:#22222f;
+  --gold-1:#f5d98a;
+  --gold-2:#d4a94a;
+  --gold-3:#b8862a;
+  --gold-glow:rgba(212,169,74,.35);
+  --white:#ffffff;
+  --soft:#e8e8f0;
+  --muted:#9a9aa8;
+  --accent-blue:#5eb8ff;
+  --accent-red:#ff6b6b;
+  --accent-green:#5fd39f;
+  --accent-purple:#c49dff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft JhengHei","PingFang TC","Heiti TC",sans-serif;
+  background:var(--bg-0);
+  color:var(--soft);
+  line-height:1.8;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(212,169,74,.08), transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(94,184,255,.05), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(196,157,255,.04), transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+.container{max-width:1200px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* ==== HEADER ==== */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:80px 24px;
+  position:relative;
+}
+.hero::after{
+  content:'';
+  position:absolute;
+  bottom:40px;left:50%;transform:translateX(-50%);
+  width:1px;height:80px;
+  background:linear-gradient(180deg,transparent,var(--gold-2));
+  animation:scrollHint 2s ease-in-out infinite;
+}
+@keyframes scrollHint{0%,100%{opacity:.3}50%{opacity:1}}
+.badge{
+  display:inline-block;
+  padding:6px 20px;
+  border:1px solid var(--gold-3);
+  border-radius:999px;
+  font-size:13px;
+  letter-spacing:3px;
+  color:var(--gold-1);
+  margin-bottom:32px;
+  background:rgba(212,169,74,.05);
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+}
+.hero h1{
+  font-family:Georgia,"Times New Roman","Microsoft JhengHei","PingFang TC",serif;letter-spacing:2px;
+  font-size:clamp(52px,9vw,120px);
+  font-weight:800;
+  letter-spacing:8px;
+  line-height:1.1;
+  margin-bottom:24px;
+  background:linear-gradient(135deg,#fff 0%,var(--gold-1) 40%,var(--gold-2) 60%,#fff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 80px var(--gold-glow);
+}
+.hero h2{
+  font-family:"Microsoft JhengHei","PingFang TC",Georgia,serif;
+  font-size:clamp(22px,3vw,36px);
+  font-weight:700;
+  color:var(--white);
+  margin-bottom:40px;
+  letter-spacing:4px;
+}
+.hero .tagline{
+  font-size:18px;
+  color:var(--muted);
+  max-width:720px;
+  margin:0 auto 48px;
+  letter-spacing:1px;
+}
+.hero .author{
+  display:inline-flex;
+  gap:12px;
+  align-items:center;
+  padding:12px 28px;
+  border:1px solid rgba(212,169,74,.3);
+  border-radius:4px;
+  background:linear-gradient(135deg,rgba(212,169,74,.08),rgba(0,0,0,.3));
+}
+.hero .author span{
+  font-size:14px;
+  color:var(--gold-1);
+  letter-spacing:2px;
+}
+
+/* ==== SECTION ==== */
+section{padding:100px 0;position:relative}
+.section-title{
+  text-align:center;
+  margin-bottom:72px;
+}
+.section-title .eyebrow{
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  color:var(--gold-2);
+  font-size:14px;
+  letter-spacing:5px;
+  margin-bottom:16px;
+}
+.section-title h2{
+  font-size:clamp(32px,5vw,56px);
+  font-weight:900;
+  color:var(--white);
+  margin-bottom:16px;
+  background:linear-gradient(135deg,#fff,var(--gold-1) 80%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.section-title p{color:var(--muted);font-size:17px;max-width:720px;margin:0 auto}
+
+/* ==== SOUL 四核心卡片 ==== */
+.soul-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:24px;
+  margin-top:48px;
+}
+.soul-card{
+  background:linear-gradient(145deg,var(--bg-2),var(--bg-1));
+  border:1px solid rgba(212,169,74,.15);
+  border-radius:12px;
+  padding:40px 28px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:all .4s cubic-bezier(.4,0,.2,1);
+}
+.soul-card:hover{
+  transform:translateY(-8px);
+  border-color:var(--gold-2);
+  box-shadow:0 20px 60px -20px var(--gold-glow);
+}
+.soul-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--gold-2),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.soul-card:hover::before{opacity:1}
+.soul-card .letter{
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  font-size:84px;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--gold-1),var(--gold-3));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  line-height:1;
+  margin-bottom:16px;
+}
+.soul-card .name-en{
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  font-size:16px;
+  letter-spacing:4px;
+  color:var(--gold-1);
+  margin-bottom:8px;
+}
+.soul-card .name-tw{
+  font-size:22px;
+  font-weight:700;
+  color:var(--white);
+  margin-bottom:16px;
+}
+.soul-card .desc{font-size:14px;color:var(--muted)}
+
+/* ==== 五大護城河 ==== */
+.moat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
+}
+.moat-item{
+  background:linear-gradient(135deg,var(--bg-2),var(--bg-1));
+  border-left:3px solid var(--gold-2);
+  padding:28px;
+  border-radius:0 8px 8px 0;
+  transition:all .3s;
+}
+.moat-item:hover{transform:translateX(8px);border-left-color:var(--gold-1)}
+.moat-item .num{
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  font-size:40px;
+  font-weight:800;
+  color:var(--gold-2);
+  line-height:1;
+  margin-bottom:12px;
+}
+.moat-item h4{font-size:22px;color:var(--white);margin-bottom:10px;letter-spacing:1px}
+.moat-item p{color:var(--soft);font-size:15px}
+
+/* ==== 情境矩陣 ==== */
+.scenarios{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:24px;
+}
+.scenario-card{
+  background:linear-gradient(145deg,var(--bg-2),var(--bg-1));
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:12px;
+  padding:32px 28px;
+  position:relative;
+  transition:all .3s;
+}
+.scenario-card:hover{border-color:var(--gold-3);transform:translateY(-4px)}
+.scenario-card .tag{
+  display:inline-block;
+  padding:4px 12px;
+  font-size:11px;
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  letter-spacing:2px;
+  background:linear-gradient(135deg,var(--gold-3),var(--gold-2));
+  color:var(--bg-0);
+  border-radius:4px;
+  margin-bottom:16px;
+  font-weight:700;
+}
+.scenario-card h3{
+  font-size:20px;
+  color:var(--white);
+  margin-bottom:12px;
+}
+.scenario-card p{color:var(--muted);font-size:14px;margin-bottom:20px}
+.scenario-card .stages{
+  display:flex;flex-wrap:wrap;gap:8px;
+  padding-top:16px;
+  border-top:1px dashed rgba(212,169,74,.2);
+}
+.scenario-card .stages span{
+  font-size:12px;
+  color:var(--gold-2);
+  padding:2px 10px;
+  background:rgba(212,169,74,.08);
+  border-radius:99px;
+}
+
+/* ==== 話術卡 ==== */
+.script-block{
+  background:linear-gradient(135deg,var(--bg-1),var(--bg-2));
+  border:1px solid rgba(212,169,74,.2);
+  border-left:4px solid var(--gold-2);
+  border-radius:8px;
+  padding:24px 28px;
+  margin:20px 0;
+  position:relative;
+}
+.script-block::before{
+  content:'「';
+  position:absolute;
+  top:8px;left:12px;
+  font-family:"Microsoft JhengHei","PingFang TC",Georgia,serif;
+  font-size:48px;
+  color:var(--gold-3);
+  opacity:.4;
+  line-height:1;
+}
+.script-block .label{
+  display:inline-block;
+  font-size:12px;
+  color:var(--gold-1);
+  letter-spacing:2px;
+  margin-bottom:12px;
+  font-weight:700;
+  padding-left:32px;
+}
+.script-block .content{
+  color:var(--white);
+  font-size:17px;
+  line-height:1.85;
+  padding-left:32px;
+}
+.script-block .content em{
+  color:var(--gold-1);
+  font-style:normal;
+  font-weight:700;
+}
+
+/* ==== 流程步驟 ==== */
+.flow-steps{counter-reset:step}
+.flow-step{
+  display:flex;
+  gap:24px;
+  margin-bottom:32px;
+  background:linear-gradient(135deg,var(--bg-2),var(--bg-1));
+  border-radius:12px;
+  padding:28px;
+  border:1px solid rgba(255,255,255,.04);
+  transition:all .3s;
+}
+.flow-step:hover{border-color:var(--gold-3);box-shadow:0 8px 32px -12px var(--gold-glow)}
+.flow-step .step-num{
+  flex-shrink:0;
+  width:60px;height:60px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-1),var(--gold-3));
+  display:flex;align-items:center;justify-content:center;
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  font-size:24px;
+  font-weight:800;
+  color:var(--bg-0);
+  box-shadow:0 8px 24px -8px var(--gold-glow);
+}
+.flow-step .step-body{flex:1}
+.flow-step h4{
+  color:var(--white);
+  font-size:22px;
+  margin-bottom:12px;
+  letter-spacing:1px;
+}
+.flow-step .note{
+  color:var(--accent-green);
+  font-size:14px;
+  margin-top:12px;
+  padding:8px 14px;
+  background:rgba(95,211,159,.08);
+  border-left:3px solid var(--accent-green);
+  border-radius:4px;
+}
+
+/* ==== 三大證據 ==== */
+.evidence-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
+  margin-top:32px;
+}
+.evidence{
+  background:linear-gradient(145deg,var(--bg-2),var(--bg-1));
+  border-top:3px solid var(--gold-2);
+  padding:28px 24px;
+  border-radius:8px;
+  transition:all .3s;
+}
+.evidence:hover{transform:translateY(-4px);box-shadow:0 12px 32px -16px var(--gold-glow)}
+.evidence .e-num{
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  color:var(--gold-2);
+  font-size:14px;letter-spacing:3px;margin-bottom:8px;
+}
+.evidence h5{color:var(--white);font-size:18px;margin-bottom:12px}
+.evidence p{color:var(--soft);font-size:14px}
+
+/* ==== 兩分鐘廣告模板 ==== */
+.two-min-ad{
+  background:
+    linear-gradient(135deg,rgba(212,169,74,.08),rgba(0,0,0,.5)),
+    radial-gradient(ellipse at top right,rgba(212,169,74,.15),transparent 60%);
+  border:2px solid var(--gold-3);
+  border-radius:16px;
+  padding:48px 40px;
+  margin:40px 0;
+  position:relative;
+  overflow:hidden;
+}
+.two-min-ad::before{
+  content:'★';
+  position:absolute;
+  top:20px;right:30px;
+  font-size:80px;
+  color:rgba(212,169,74,.1);
+  line-height:1;
+}
+.two-min-ad .kicker{
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  color:var(--gold-1);
+  font-size:12px;
+  letter-spacing:5px;
+  margin-bottom:16px;
+}
+.two-min-ad h3{
+  font-size:36px;
+  color:var(--white);
+  margin-bottom:8px;
+  background:linear-gradient(135deg,#fff,var(--gold-1));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.two-min-ad .subtitle{color:var(--gold-2);font-size:18px;margin-bottom:32px}
+.two-min-ad .structure{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  margin-top:24px;
+}
+.two-min-ad .s-item{
+  padding:20px;
+  background:rgba(0,0,0,.3);
+  border-radius:8px;
+  border-left:3px solid var(--gold-2);
+}
+.two-min-ad .s-item .s-num{
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  color:var(--gold-1);
+  font-weight:800;
+  font-size:32px;
+  line-height:1;
+  margin-bottom:8px;
+}
+.two-min-ad .s-item h5{color:var(--white);font-size:16px;margin-bottom:8px}
+.two-min-ad .s-item p{color:var(--muted);font-size:13px}
+
+/* ==== 提問話術庫 ==== */
+.qa-tabs{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  margin-bottom:32px;
+}
+.qa-tab{
+  padding:10px 24px;
+  border:1px solid rgba(212,169,74,.3);
+  border-radius:99px;
+  background:transparent;
+  color:var(--gold-1);
+  cursor:pointer;
+  font-family:inherit;
+  font-size:14px;
+  letter-spacing:1px;
+  transition:all .3s;
+}
+.qa-tab:hover,.qa-tab.active{
+  background:linear-gradient(135deg,var(--gold-3),var(--gold-2));
+  color:var(--bg-0);
+  border-color:var(--gold-2);
+  font-weight:700;
+}
+.qa-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+  gap:16px;
+}
+.qa-card{
+  background:linear-gradient(145deg,var(--bg-2),var(--bg-1));
+  border-left:3px solid var(--accent-blue);
+  padding:20px 24px;
+  border-radius:0 8px 8px 0;
+  transition:all .3s;
+}
+.qa-card:hover{border-left-color:var(--gold-2);transform:translateX(6px)}
+.qa-card .cat{
+  font-size:11px;letter-spacing:2px;
+  color:var(--accent-blue);margin-bottom:8px;
+}
+.qa-card:hover .cat{color:var(--gold-2)}
+.qa-card p{color:var(--white);font-size:16px;font-weight:500}
+.qa-card .hint{color:var(--muted);font-size:13px;margin-top:8px;font-style:italic}
+
+/* ==== 專家引用 ==== */
+.expert-quotes{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:20px;
+  margin-top:32px;
+}
+.expert-card{
+  background:
+    linear-gradient(145deg,var(--bg-2),var(--bg-1));
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:12px;
+  padding:28px 24px;
+  transition:all .3s;
+  position:relative;
+}
+.expert-card.featured{
+  border-color:var(--gold-2);
+  background:linear-gradient(145deg,var(--bg-3),var(--bg-2));
+  box-shadow:0 8px 32px -16px var(--gold-glow);
+}
+.expert-card.featured::after{
+  content:'TIER 1';
+  position:absolute;
+  top:-10px;right:20px;
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  font-size:11px;letter-spacing:2px;font-weight:800;
+  padding:4px 12px;
+  background:linear-gradient(135deg,var(--gold-1),var(--gold-3));
+  color:var(--bg-0);
+  border-radius:4px;
+}
+.expert-card h5{
+  font-size:20px;color:var(--white);
+  margin-bottom:4px;
+}
+.expert-card.featured h5{color:var(--gold-1)}
+.expert-card .title{color:var(--muted);font-size:13px;margin-bottom:16px}
+.expert-card .quote{
+  color:var(--soft);
+  font-size:15px;
+  font-style:italic;
+  padding-left:16px;
+  border-left:2px solid var(--gold-3);
+  margin-bottom:16px;
+}
+.expert-card .tech{
+  font-size:13px;
+  color:var(--accent-green);
+  padding-top:12px;
+  border-top:1px dashed rgba(255,255,255,.08);
+}
+
+/* ==== 抗拒處理 ==== */
+.objection-list{display:grid;gap:16px;margin-top:32px}
+.objection{
+  background:linear-gradient(135deg,var(--bg-2),var(--bg-1));
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid rgba(255,100,100,.15);
+}
+.objection .q{
+  background:linear-gradient(135deg,rgba(255,107,107,.1),transparent);
+  padding:18px 24px;
+  color:var(--accent-red);
+  font-weight:700;
+  font-size:17px;
+  border-bottom:1px solid rgba(255,100,100,.1);
+}
+.objection .q::before{content:'⚠ ';margin-right:6px}
+.objection .a{padding:20px 24px}
+.objection .a .label{
+  color:var(--accent-green);
+  font-size:12px;letter-spacing:2px;
+  margin-bottom:8px;
+}
+.objection .a p{color:var(--white);font-size:15px}
+
+/* ==== 紅燈區 ==== */
+.red-zone{
+  background:linear-gradient(135deg,rgba(255,107,107,.08),rgba(0,0,0,.5));
+  border:1px solid rgba(255,107,107,.3);
+  border-radius:12px;
+  padding:32px;
+  margin:40px 0;
+}
+.red-zone h4{
+  color:var(--accent-red);
+  font-size:22px;
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.red-zone .bad-example{
+  background:rgba(0,0,0,.4);
+  border-left:3px solid var(--accent-red);
+  padding:16px 20px;
+  margin:12px 0;
+  color:var(--muted);
+  font-style:italic;
+  border-radius:0 6px 6px 0;
+}
+
+/* ==== 目錄導航 ==== */
+.nav-float{
+  position:fixed;
+  right:32px;top:50%;
+  transform:translateY(-50%);
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:16px 12px;
+  background:rgba(10,10,15,.85);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(212,169,74,.2);
+  border-radius:999px;
+}
+.nav-float a{
+  width:10px;height:10px;
+  border-radius:50%;
+  background:rgba(212,169,74,.3);
+  transition:all .3s;
+  position:relative;
+}
+.nav-float a:hover{background:var(--gold-1);transform:scale(1.5)}
+.nav-float a .tooltip{
+  position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  background:var(--bg-3);
+  color:var(--white);
+  padding:4px 10px;
+  font-size:12px;
+  border-radius:4px;
+  white-space:nowrap;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s;
+  border:1px solid rgba(212,169,74,.2);
+}
+.nav-float a:hover .tooltip{opacity:1}
+
+/* ==== 分隔 ==== */
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-3) 50%,transparent);
+  margin:32px 0;
+}
+
+/* ==== 超級重點框 ==== */
+.highlight-box{
+  background:
+    linear-gradient(135deg,rgba(212,169,74,.1),rgba(212,169,74,.02)),
+    var(--bg-2);
+  border:1px solid var(--gold-3);
+  border-radius:12px;
+  padding:28px 32px;
+  margin:24px 0;
+  position:relative;
+}
+.highlight-box::before{
+  content:'★ 超級重點';
+  position:absolute;
+  top:-12px;left:24px;
+  background:var(--bg-0);
+  padding:0 12px;
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  font-size:13px;
+  letter-spacing:3px;
+  color:var(--gold-1);
+}
+.highlight-box p{color:var(--white);font-size:16px;line-height:1.85}
+
+/* ==== Footer ==== */
+footer{
+  padding:60px 24px 40px;
+  text-align:center;
+  border-top:1px solid rgba(212,169,74,.15);
+  margin-top:80px;
+}
+footer p{color:var(--muted);font-size:14px;margin:4px 0}
+footer .brand{
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:2px;
+  color:var(--gold-1);
+  letter-spacing:4px;
+  font-size:16px;
+}
+
+h3{color:var(--white);font-size:28px;margin:40px 0 20px;letter-spacing:1px;font-weight:700}
+h3::before{content:'';display:inline-block;width:4px;height:28px;background:linear-gradient(180deg,var(--gold-1),var(--gold-3));margin-right:14px;vertical-align:middle;border-radius:2px}
+h4{color:var(--white);font-size:22px;margin:24px 0 12px;letter-spacing:1px}
+p{margin-bottom:16px;color:var(--soft)}
+strong{color:var(--gold-1);font-weight:700}
+ul,ol{margin:12px 0 16px 28px;color:var(--soft)}
+ul li,ol li{margin-bottom:8px}
+
+@media(max-width:720px){
+  .nav-float{display:none}
+  .hero h1{letter-spacing:4px}
+  .flow-step{flex-direction:column;text-align:center}
+  .flow-step .step-num{margin:0 auto}
+}
+</style>
+</head>
+<body>
+
+<!-- 浮動導航 -->
+<nav class="nav-float">
+  <a href="#hero"><span class="tooltip">封面</span></a>
+  <a href="#soul"><span class="tooltip">SOUL 核心</span></a>
+  <a href="#moat"><span class="tooltip">五大護城河</span></a>
+  <a href="#scenarios"><span class="tooltip">六大情境</span></a>
+  <a href="#direct-retail"><span class="tooltip">直接法・零售</span></a>
+  <a href="#direct-recruit"><span class="tooltip">直接法・招募</span></a>
+  <a href="#referral"><span class="tooltip">轉介法</span></a>
+  <a href="#two-min"><span class="tooltip">兩分鐘廣告</span></a>
+  <a href="#questions"><span class="tooltip">提問話術庫</span></a>
+  <a href="#closing"><span class="tooltip">四句成交模板</span></a>
+  <a href="#objections"><span class="tooltip">六大抗拒</span></a>
+  <a href="#masters"><span class="tooltip">大師佐證</span></a>
+  <a href="#flowmap"><span class="tooltip">路徑圖</span></a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="badge">CHEN PO-WEI × OMNI · 2026</div>
+  <h1>SOUL</h1>
+  <h2>成交對話系統</h2>
+  <p class="tagline">全亞洲第一套以「靈魂共鳴」為核心的精準成交方法論<br>
+  融合張邁可實戰心法 × 全球銷售大師佐證 × 美安超連鎖實戰</p>
+  <div class="author">
+    <span>陳柏維 Allen × OMNI 宇宙最強智囊團 · Version 1.0</span>
+  </div>
+</section>
+
+<!-- SOUL 四核心 -->
+<section id="soul">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">CORE FRAMEWORK</div>
+      <h2>SOUL 四大核心</h2>
+      <p>不是話術，是靈魂的對話。成交率最高的業務，反而說更少——靠的是「問對」，讓客戶說服他自己。</p>
+    </div>
+    <div class="soul-grid">
+      <div class="soul-card">
+        <div class="letter">S</div>
+        <div class="name-en">SENSE</div>
+        <div class="name-tw">洞察需求</div>
+        <p class="desc">精準提問、讀懂痛點、不推銷產品</p>
+      </div>
+      <div class="soul-card">
+        <div class="letter">O</div>
+        <div class="name-en">OPEN</div>
+        <div class="name-tw">開啟信任</div>
+        <p class="desc">故事先行、兩分鐘廣告、建立人的價值</p>
+      </div>
+      <div class="soul-card">
+        <div class="letter">U</div>
+        <div class="name-en">UNDERSTAND</div>
+        <div class="name-tw">深化理解</div>
+        <p class="desc">1-10 分評分、三個月影響、需求複述</p>
+      </div>
+      <div class="soul-card">
+        <div class="letter">L</div>
+        <div class="name-en">LEAD</div>
+        <div class="name-tw">引導決策</div>
+        <p class="desc">假設框架、二選一、三大證據、鎖定行動</p>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <p>SOUL 系統不是把人當成「要被成交的對象」，而是把每一段對話當成一次「靈魂級的交流」。你越懂得問，他越願意說；他說得越多，就越接近成交。<br><br>
+      <strong>你的使命不是說服他，是幫助他自己看清楚他要什麼。</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- 五大護城河 -->
+<section id="moat">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">YES TEAM MOAT</div>
+      <h2>五大護城河</h2>
+      <p>全亞洲唯一 YES 團隊最強五大護城河，讓邀約成功率拉到最高，更容易吸引優質人才</p>
+    </div>
+    <div class="moat-grid">
+      <div class="moat-item">
+        <div class="num">01</div>
+        <h4>AI</h4>
+        <p>不是會不會用 AI，也不是跟 AI 聊天而已。要用 AI 做出你要的結果——讓 AI 變成你的智囊團與代理團隊，成為最聰明的執行者。</p>
+      </div>
+      <div class="moat-item">
+        <div class="num">02</div>
+        <h4>自媒體</h4>
+        <p>名單 = 資產 = 財富。打造自媒體個人品牌，建立源源不絕的精準優質名單磁鐵，讓內容持續吸引最想要的名單主動來找你。</p>
+      </div>
+      <div class="moat-item">
+        <div class="num">03</div>
+        <h4>故事行銷</h4>
+        <p>世界不缺好商品。為什麼我跟你買？因為我信任你這個人，我買單你的故事。AI 能給知識，無法取代的只有你是誰。</p>
+      </div>
+      <div class="moat-item">
+        <div class="num">04</div>
+        <h4>銷售成交技術</h4>
+        <p>人生無處不銷售——表白、面試、家人溝通、同事協調、教小孩，全部都是銷售。這是地球上唯一能突破收入天花板的能力。</p>
+      </div>
+      <div class="moat-item">
+        <div class="num">05</div>
+        <h4>商業模式與變現</h4>
+        <p>前四個都是鋪陳。最後需要一個驗證可行的商業模式——美安 SHOP.COM 超連鎖事業，讓所有功夫有變現的管道。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 六大情境 -->
+<section id="scenarios">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">6 SCENARIOS</div>
+      <h2>六大情境矩陣</h2>
+      <p>對話不是線性流程，而是流動的情境。夥伴只需先選「我現在是哪個場景」，就能直接查每個關鍵節點怎麼說。</p>
+    </div>
+    <div class="scenarios">
+      <div class="scenario-card">
+        <span class="tag">SCENARIO A</span>
+        <h3>熟識的人</h3>
+        <p>從生活聊到引入，適用水庫名單前十大。用直接法，運用五大護城河切入。</p>
+        <div class="stages"><span>開場</span><span>引發好奇</span><span>兩分鐘廣告</span><span>推進</span></div>
+      </div>
+      <div class="scenario-card">
+        <span class="tag">SCENARIO B</span>
+        <h3>陌生人 · 線下偶遇</h3>
+        <p>快速破冰，讚美+提問，引發抱怨，再用轉介法降低壓力。</p>
+        <div class="stages"><span>讚美</span><span>提問</span><span>轉介法</span><span>產品課邀約</span></div>
+      </div>
+      <div class="scenario-card">
+        <span class="tag">SCENARIO C</span>
+        <h3>社群私訊 · 冷觸點</h3>
+        <p>IG/FB/LINE 私訊開場，先建立連結再切入，不直接推產品或事業。</p>
+        <div class="stages"><span>互動</span><span>建立信任</span><span>約通話</span><span>ABC</span></div>
+      </div>
+      <div class="scenario-card">
+        <span class="tag">SCENARIO D</span>
+        <h3>展示後跟進</h3>
+        <p>看完說明會或試用產品後，24-72 小時內的關鍵跟進動作。</p>
+        <div class="stages"><span>關心</span><span>確認感受</span><span>釐清疑慮</span><span>推進</span></div>
+      </div>
+      <div class="scenario-card">
+        <span class="tag">SCENARIO E</span>
+        <h3>已拒絕過</h3>
+        <p>二次或三次接觸。不糾結過去，用新的切入點與故事重建對話。</p>
+        <div class="stages"><span>重啟</span><span>新角度</span><span>故事</span><span>軟邀約</span></div>
+      </div>
+      <div class="scenario-card">
+        <span class="tag">SCENARIO F</span>
+        <h3>零售+招募並行</h3>
+        <p>購物年金與事業機會同時推進，最高效率的複合型對話。</p>
+        <div class="stages"><span>產品見證</span><span>事業機會</span><span>聯盟行銷</span><span>成交</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 紅燈區 -->
+<section>
+  <div class="container">
+    <div class="red-zone">
+      <h4>⚠ SOUL 紅燈警示區・絕對不要這樣講</h4>
+      <p>展示美安時，開場非常重要。以下這些做法 <strong>絕對此路不通</strong>，新朋友會馬上已讀不回甚至直接消失：</p>
+      <div class="bad-example">「我在經營美安、我在做美安，美安很棒、產品很好、事業很棒，你要不要賺錢？要賺錢就來，產品很棒可以幫你治療什麼⋯⋯」</div>
+      <p>為什麼不行？因為你直接把對方當成「要被成交的獵物」，沒有建立任何感受面與情境連結。記住：<strong>我們的成交系統重點不在產品與事業有多好，而是對方的痛點與夢想被精準承接</strong>。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 直接法 零售 -->
+<section id="direct-retail">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">DIRECT METHOD · RETAIL</div>
+      <h2>直接法 · 零售實戰流程</h2>
+      <p>針對水庫名單前十大，發現痛點直接開場，帶入見證、證據、產品課</p>
+    </div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>發現痛點 · 直接開場</h4>
+          <div class="script-block">
+            <div class="label">開場話術</div>
+            <div class="content">對了，你這個問題大概多久了？之前有想過用什麼樣的方式去解決嗎？不管是看中醫或西醫，有嘗試過其他的方法嗎？</div>
+          </div>
+          <p class="note">關鍵：不要評論他的問題，只是「關心式提問」。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>讚美過渡 · 降低戒心</h4>
+          <div class="script-block">
+            <div class="label">讚美話術</div>
+            <div class="content">其實你這個情況還好啊，我覺得還算 OK、還算不錯。</div>
+          </div>
+          <p class="note">即使對方膚況很差，也要先讚美他比起很多人已經算蠻好的了。這是降低防禦機制的關鍵。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>1-10 分評分 · 確認需求強度</h4>
+          <div class="script-block">
+            <div class="label">評分話術</div>
+            <div class="content">如果可以更好，你會想要參考更多資訊嗎？<em>針對這個問題，你想解決的程度（1 到 10 分）大概是幾分？</em></div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>帶入產品見證（故事行銷）</h4>
+          <p><strong>三段式見證故事框架：</strong></p>
+          <ol>
+            <li>我當初原本是什麼狀況？</li>
+            <li>透過什麼樣的方法、方案或產品？</li>
+            <li>最後我現在的成果大概是如何？<span style="color:var(--gold-1)">（這段要重點敘述）</span></li>
+          </ol>
+          <div class="script-block">
+            <div class="label">見證話術</div>
+            <div class="content">我原本比你還慘（或差不多），後來也嘗試過非常多的方式，但都沒用，或是效果很差，甚至又打回原形。<em>直到我現在用了這個方法⋯⋯</em></div>
+          </div>
+          <p class="note">只需簡短說明方法重點。客戶不在意產品本身，只在意「能達到什麼樣的結果、什麼樣的夢想畫面」。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>三大證據加強說服</h4>
+          <div class="evidence-grid">
+            <div class="evidence">
+              <div class="e-num">EVIDENCE 01</div>
+              <h5>最強 Before/After</h5>
+              <p>自己、夥伴或客戶的實際改變。<strong>改變幅度越大、原本情況跟他越像</strong>，他越想要，成功率越高。</p>
+            </div>
+            <div class="evidence">
+              <div class="e-num">EVIDENCE 02</div>
+              <h5>萃取後的數據</h5>
+              <p>「劃重點」能力。魚油純度、3 個月降低 30-50% 特定狀況、顧客 GOT/GPT 從 300 多降到正常——用數據連結痛點。</p>
+            </div>
+            <div class="evidence">
+              <div class="e-num">EVIDENCE 03</div>
+              <h5>產品培訓課（最高成功率）</h5>
+              <p>直接把對方帶到最大的借力環境，由講師做 ABC。醫生、營養師、醫學專家分享保健方法。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>產品課邀約 · 終極話術</h4>
+          <div class="script-block">
+            <div class="label">產品課邀約完整話術</div>
+            <div class="content">對了，我平常每個月都會去參加營養保健或預防醫學的講座。講者都是醫生、營養師、醫學專家或教授等專業人士。<br><br>
+            這些保健知識如果是在網路上找，或是問 AI，其實不容易得到，因為這是他們<em>最臨床、最實際的經驗</em>。他們會分享一般人該如何保養、針對特定問題該如何保健，以及如何補充食物與營養素才是最健康的。<br><br>
+            同時，講者也會分享他自己平常保養的方法（這裡其實就是指美安的產品，但在這種場合不直說產品，而是強調『保健的方法』）。<br><br>
+            聽完之後，對於自己和家人的健康都能有更深層、更全面的照顧。<em>假設之後有不錯的場次，如果你時間剛好，會想要一起去嗎？</em></div>
+          </div>
+          <p class="note">關鍵收尾：馬上給 2-3 個場次，二選一或三選一，邀約成功率最高。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 直接法 招募 -->
+<section id="direct-recruit">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">DIRECT METHOD · RECRUITING</div>
+      <h2>直接法 · 招募實戰流程</h2>
+      <p>跟朋友吃飯、喝咖啡、聊天聚會，透過正確提問引導話題</p>
+    </div>
+
+    <h3>Stage 1 · 提問開場三式</h3>
+    <div class="flow-step">
+      <div class="step-num">A</div>
+      <div class="step-body">
+        <h4>讚美引發抱怨型</h4>
+        <div class="script-block">
+          <div class="label">開場</div>
+          <div class="content">最近工作如何？<em>感覺不錯耶！</em></div>
+        </div>
+        <p class="note">先讚美對方，反而容易引發對方的抱怨——「其實最近有點累⋯⋯」</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">B</div>
+      <div class="step-body">
+        <h4>限時動態觀察型</h4>
+        <div class="script-block">
+          <div class="label">開場</div>
+          <div class="content">我在限時動態（或 FB、IG）看到你發生了一些情況，現在還好嗎？有處理好了嗎？</div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">C</div>
+      <div class="step-body">
+        <h4>聊趨勢引發共鳴型</h4>
+        <div class="script-block">
+          <div class="label">開場</div>
+          <div class="content">最近油價那麼高，你那臺車這樣加一次油要多少錢？</div>
+        </div>
+        <p class="note">「太扯了！原本 2000 元，現在變成 2500 元。」——從這裡切入增加收入的話題。</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3>Stage 2 · 危機意識三大切入法（不刺痛・不教育）</h3>
+    <p>在聊天過程中，藉由以下三種方式切入危機感，讓對方自然產生共鳴：</p>
+    <div class="evidence-grid">
+      <div class="evidence">
+        <div class="e-num">PATH 01</div>
+        <h5>觀察社會現況</h5>
+        <p>「你有看到那個新聞嗎？現在 xx 行業的人⋯⋯」用第三方視角，對方不會覺得被針對。</p>
+      </div>
+      <div class="evidence">
+        <div class="e-num">PATH 02</div>
+        <h5>引經據典大神觀點</h5>
+        <p>「我最近看羅胖（或某講師）講到⋯⋯」讓大神替你傳話，對方不會防禦你。</p>
+      </div>
+      <div class="evidence">
+        <div class="e-num">PATH 03</div>
+        <h5>自己或朋友的故事</h5>
+        <p>「我有個朋友最近⋯⋯」用故事共鳴，讓對方自己對號入座。</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>危機意識 10 組話術範本（OMNI 補設計）：</strong></p>
+      <ol>
+        <li>「你有發現嗎？我們這個年紀身邊開始有人在聊『退休』這兩個字了——但現實是，沒幾個人真的準備好。」</li>
+        <li>「最近我看到一個數據很驚人，台灣 60% 的上班族沒有存到一年生活費。這不是窮，這是結構問題。」</li>
+        <li>「我朋友前陣子被裁員，他比我們都還要優秀。那時候我在想，如果今天換成是我，我撐得過三個月嗎？」</li>
+        <li>「你不覺得現在的生活成本漲得很誇張嗎？光是外食一餐就 200 起跳了，我們的薪水漲了嗎？」</li>
+        <li>「前幾天和一個做了 20 年傳統業務的朋友聊，他說現在客戶找人都只在 IG 和 YouTube，他完全不知道怎麼辦。」</li>
+        <li>「我爸媽那輩還可以買房存錢，我們這代連買房都是奢求了。你有想過，我們小孩那一代會怎樣嗎？」</li>
+        <li>「我看一份報告說，未來 5 年內 40% 的工作會被 AI 取代。你覺得你現在的工作在不在那 40% 裡面？」</li>
+        <li>「你知道什麼最可怕嗎？不是沒錢，是 50 歲了還在換工作、還在跟 25 歲的爭位置。」</li>
+        <li>「我有個朋友做了老闆一輩子的業務，結果公司倒了，他什麼都沒留下。我們是不是要想一下『萬一』？」</li>
+        <li>「你不覺得很多人都很努力，但日子好像沒有越來越好？問題不在努力，是在『努力的方向』對不對。」</li>
+      </ol>
+      <p style="color:var(--muted);margin-top:16px;font-size:14px">使用原則：選 1 句，不要一次用多句。且一定要用自己的語氣改寫，不要照讀。</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3>Stage 3 · 深化需求三問</h3>
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="script-block">
+          <div class="label">問題 1</div>
+          <div class="content">你有多想要解決這個問題？</div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="script-block">
+          <div class="label">問題 2</div>
+          <div class="content">這個問題困擾你多久了？<em>如果以 1 到 10 分來評分，大約是幾分？</em></div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="script-block">
+          <div class="label">問題 3</div>
+          <div class="content">如果現在不解決，<em>持續三個月甚至一年後，會有什麼樣的影響？</em></div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:24px">確認對方需求後，直接帶入 SOUL 系統的鎮店之寶——</p>
+  </div>
+</section>
+
+<!-- 兩分鐘廣告 -->
+<section id="two-min">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">SIGNATURE WEAPON</div>
+      <h2>兩分鐘廣告</h2>
+      <p>SOUL 系統鎮店之寶・故事行銷變現的核心武器</p>
+    </div>
+    <div class="two-min-ad">
+      <div class="kicker">2-MINUTE COMMERCIAL · BOWEI SIGNATURE</div>
+      <h3>你的人生故事就是最強武器</h3>
+      <p class="subtitle">用 2-3 分鐘，用輕鬆自然、對話的方式，把你自己變成一支活生生的廣告</p>
+      <div class="structure">
+        <div class="s-item">
+          <div class="s-num">01</div>
+          <h5>為什麼要改變</h5>
+          <p>原本的狀態，或許不缺錢、不慘，但有個遲遲無法解決的痛點，看不到希望。</p>
+        </div>
+        <div class="s-item">
+          <div class="s-num">02</div>
+          <h5>發現解決方案</h5>
+          <p>用了這個產品、方案、方法或事業，獲得成長，慢慢改變現在的狀態。</p>
+        </div>
+        <div class="s-item">
+          <div class="s-num">03</div>
+          <h5>現在變成了什麼</h5>
+          <p>用具體的事實描述現在的樣子——收入、健康、時間自由度、心境。</p>
+        </div>
+        <div class="s-item">
+          <div class="s-num">04</div>
+          <h5>未來願景（1 年 / 3 年）</h5>
+          <p>清楚敘述你要去的地方。1 年：10 萬現金流+辭職做公益。3 年：半退休+一年出國六次。</p>
+        </div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <p><strong>使用場景（超關鍵）：</strong><br>
+      兩分鐘廣告要<strong>隨時隨地融入所有環節</strong>——邀約 / 零售 / 招募 / 跟進 / 成交。它不是一個階段的工具，而是 SOUL 系統的「血液」，流動在每一次對話的毛細血管裡。<br><br>
+      <strong>不要著墨於產品是什麼、事業是什麼。</strong>那些專業內容留給 ABC 展示計畫或美安實體會議由講師展示。<strong>你的唯一任務：讓對方先被你這個「人」打動。</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- 四句成交模板 -->
+<section id="closing">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">4-LINE CLOSING TEMPLATE</div>
+      <h2>四句成交萬能模板</h2>
+      <p>成交率最高的業務，反而說更少——靠的是「問對」，讓客戶說服他自己</p>
+    </div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>開場</h4>
+          <div class="script-block">
+            <div class="label">話術</div>
+            <div class="content">對了，我好奇問你一件事，可以嗎？</div>
+          </div>
+          <p class="note">心理學原理：「獲得許可」開場讓對方的防禦系統關閉。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>提問</h4>
+          <div class="script-block">
+            <div class="label">問 1</div>
+            <div class="content">你現在最大的挑戰或煩惱是什麼？</div>
+          </div>
+          <div class="script-block">
+            <div class="label">問 2</div>
+            <div class="content">這個問題如果繼續困擾你，<em>三個月或一年後會怎麼樣？</em></div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>附和</h4>
+          <div class="script-block">
+            <div class="label">話術</div>
+            <div class="content">你說的這個點很關鍵。（並且重複他最後說的話）</div>
+          </div>
+          <p class="note">這是 NLP「鏡映」技術——讓對方感受到被真正聽見。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>推進</h4>
+          <div class="script-block">
+            <div class="label">話術</div>
+            <div class="content">假設有一個解決方案，<em>成本較低、效果更好、速度更快</em>——你會想參考更多資訊嗎？</div>
+          </div>
+          <p class="note">「假設」框架降低決策壓力，「參考資訊」的門檻比「買」低得多。</p>
+        </div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <p><strong>核心原理：</strong>你越懂得問，他更願意說。你說得越少，他說得越多——他說得越多，就越接近成交。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 轉介法 -->
+<section id="referral">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">REFERRAL METHOD</div>
+      <h2>轉介法（聯盟行銷）</h2>
+      <p>針對所有人都可以執行，對方不會覺得被推銷，反而放鬆聽你分享</p>
+    </div>
+    <h3>轉介法雙贏結構</h3>
+    <div class="evidence-grid">
+      <div class="evidence">
+        <div class="e-num">BENEFIT 01</div>
+        <h5>無風險試做事業</h5>
+        <p>轉介成功 = 提早開始這份事業。沒成功 = 零損失。</p>
+      </div>
+      <div class="evidence">
+        <div class="e-num">BENEFIT 02A</div>
+        <h5>實體禮物</h5>
+        <p>美安獨家商品試用包、隨身包。送到心坎裡不必貴重。</p>
+      </div>
+      <div class="evidence">
+        <div class="e-num">BENEFIT 02B</div>
+        <h5>聯盟行銷獎金</h5>
+        <p>零售利潤 30% → 分他 15%。招募成功自掏腰包 1000 元/人。</p>
+      </div>
+    </div>
+
+    <h3>聯盟行銷轉介完整話術</h3>
+    <div class="script-block">
+      <div class="label">柏維哥原話・完整版</div>
+      <div class="content">
+      所以，我需要你幫我做的事情，是你不用投入任何資金，也不用投入大量時間。你只是幫我物色，去幫我留意周遭有哪些朋友比較在意自己的健康、膚況，或是有什麼樣的需求。<br><br>
+      當你幫我轉介成功，這個顧客跟我買了，<em>我分一半的利潤給你</em>。我的利潤大概有將近 30%，所以我分一半給你，就有超過 10%。這是一個很高額的利潤，你幾乎什麼都不用做，就可以賺到這個很即時的現金。<br><br>
+      而且服務顧客這些全部都是我來做，你只要在有適當機會開口就好了。除了這個超過 10% 的聯盟行銷分潤，<em>我還會額外自掏腰包送你一個小禮物</em>——美安最熱門產品的隨身包。<br><br>
+      當然，這裡有一個小小的要求：假設你願意參與這樣的計畫，需要配合參加一次我們的產品培訓課（大約三個小時）。這件事至少要做一次：
+      <ol style="margin-top:12px">
+        <li>建立信心：你有參加過，才會知道產品的價值與優勢。</li>
+        <li>學習分享：瞭解美安獨家代理商品的專業知識，你才知道該如何向他人分享。</li>
+      </ol>
+      參加完之後，如果你發現這不適合你、不想分享，也沒關係——你依然學到了很多保健營養知識，可以照顧自己和家人的健康，對你來說沒有任何損失。<br><br>
+      但如果你在評估過程中發現產品真的非常棒，而且背後還有更大的商機，你可以採取三步驟：<br>
+      <em>① 無風險起步</em>：先做聯盟行銷，賺 10% 以上的即時利潤<br>
+      <em>② 深入發展</em>：評估事業、分紅制度、教育培訓系統（大陸市場剛開放，商機龐大）<br>
+      <em>③ 專業投入</em>：一切都 OK 時，評估進一步投入，賺取更多被動收入。
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>八二法則應用：</strong>1 位願意幫你轉介 5 個人的朋友 × 左右各一位 = 1 萬元成本換一個「對的人」。對的人做起來後月入 30-45 萬。這位轉介者最後也一定會想加入。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 提問話術庫 -->
+<section id="questions">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">QUESTION ARSENAL</div>
+      <h2>招募提問話術庫・30 招</h2>
+      <p>讚美 + 引發抱怨 + 聊現狀 + 危機感 的綜合武器庫</p>
+    </div>
+
+    <h3>◈ 讚美引發抱怨型（10 招）</h3>
+    <div class="qa-grid">
+      <div class="qa-card"><div class="cat">讚美 01</div><p>「最近工作如何？感覺不錯耶！」</p><p class="hint">先肯定，反而引發抱怨</p></div>
+      <div class="qa-card"><div class="cat">讚美 02</div><p>「你最近氣色真的很好，是有什麼事情讓你心情特別不一樣嗎？」</p></div>
+      <div class="qa-card"><div class="cat">讚美 03</div><p>「我每次看你發文都覺得你狀態很好，但真的都這麼順嗎？」</p></div>
+      <div class="qa-card"><div class="cat">讚美 04</div><p>「你做這行做這麼久了一定超熟，你會繼續做下去到退休嗎？」</p></div>
+      <div class="qa-card"><div class="cat">讚美 05</div><p>「你家人一定很以你為榮吧？你覺得你現在給家人的，夠了嗎？」</p></div>
+      <div class="qa-card"><div class="cat">讚美 06</div><p>「你真的很會打扮，花這麼多錢在保養、在自己身上，會有點肉痛嗎？」</p></div>
+      <div class="qa-card"><div class="cat">讚美 07</div><p>「你這個職位薪水一定不錯吧？但你的時間還是你自己的嗎？」</p></div>
+      <div class="qa-card"><div class="cat">讚美 08</div><p>「你運動這麼勤，是因為身體有什麼警訊嗎？還是想保持狀態？」</p></div>
+      <div class="qa-card"><div class="cat">讚美 09</div><p>「你小孩教得真好，你覺得我們這一代給小孩最好的禮物是什麼？」</p></div>
+      <div class="qa-card"><div class="cat">讚美 10</div><p>「你朋友圈真的好廣，你覺得現在這個時代，什麼能力最值錢？」</p></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3>◈ 觀察切入型（10 招）</h3>
+    <div class="qa-grid">
+      <div class="qa-card"><div class="cat">觀察 01</div><p>「我在限時動態看到你之前發生的狀況，現在還好嗎？處理好了嗎？」</p></div>
+      <div class="qa-card"><div class="cat">觀察 02</div><p>「你最近發文感覺比較少耶，是比較忙還是⋯⋯？」</p></div>
+      <div class="qa-card"><div class="cat">觀察 03</div><p>「我看你最近常常 po 旅遊，你是不是已經做到一種生活自由的狀態了？」</p></div>
+      <div class="qa-card"><div class="cat">觀察 04</div><p>「你貼文裡面都在分享學習的東西，你是在轉換跑道嗎？」</p></div>
+      <div class="qa-card"><div class="cat">觀察 05</div><p>「你最近po的那個金句我超有感，你最近是在思考什麼事情嗎？」</p></div>
+      <div class="qa-card"><div class="cat">觀察 06</div><p>「你好久沒有更新工作狀態了，是不是遇到什麼卡點？」</p></div>
+      <div class="qa-card"><div class="cat">觀察 07</div><p>「看你都在看很多創業類的書，有什麼在規劃的嗎？」</p></div>
+      <div class="qa-card"><div class="cat">觀察 08</div><p>「你最近瘦好多耶！是刻意的還是壓力大？」</p></div>
+      <div class="qa-card"><div class="cat">觀察 09</div><p>「我注意到你開始分享親子的照片，你現在重心有在往家庭移動嗎？」</p></div>
+      <div class="qa-card"><div class="cat">觀察 10</div><p>「你 IG 的風格完全變了，是有什麼新計畫嗎？」</p></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3>◈ 趨勢引發共鳴型（10 招）</h3>
+    <div class="qa-grid">
+      <div class="qa-card"><div class="cat">趨勢 01</div><p>「最近油價那麼高，你那臺車加一次油要多少？」</p></div>
+      <div class="qa-card"><div class="cat">趨勢 02</div><p>「你有發現外食一餐 200 起跳了嗎？我們薪水漲得上嗎？」</p></div>
+      <div class="qa-card"><div class="cat">趨勢 03</div><p>「AI 現在這樣搞下去，你覺得你的工作 5 年內會不會被取代？」</p></div>
+      <div class="qa-card"><div class="cat">趨勢 04</div><p>「你有看房嗎？現在這個價格你買得下去嗎？」</p></div>
+      <div class="qa-card"><div class="cat">趨勢 05</div><p>「台灣老齡化這麼快，你有想過你 60 歲的時候會怎樣嗎？」</p></div>
+      <div class="qa-card"><div class="cat">趨勢 06</div><p>「你身邊有朋友做自媒體做起來的嗎？你會想做嗎？」</p></div>
+      <div class="qa-card"><div class="cat">趨勢 07</div><p>「現在年輕人都在搞斜槓，你有想過第二份收入嗎？」</p></div>
+      <div class="qa-card"><div class="cat">趨勢 08</div><p>「健保漲了、電費漲了、什麼都漲——除了薪水。你不覺得怪嗎？」</p></div>
+      <div class="qa-card"><div class="cat">趨勢 09</div><p>「中國大陸現在開放了，你覺得這是機會還是危機？」</p></div>
+      <div class="qa-card"><div class="cat">趨勢 10</div><p>「你有在關注被動收入這個議題嗎？」</p></div>
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>使用原則：</strong>一次選 1 句，不要連問。語氣要自然不刻意。對方抱怨完先附和（「真的超有感」），再用 SOUL 四句模板推進。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 六大抗拒 -->
+<section id="objections">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">6 OBJECTIONS</div>
+      <h2>六大常見抗拒破解</h2>
+      <p>節錄自 JR Coach 73 PART 系統・張邁可佐證補強</p>
+    </div>
+    <div class="objection-list">
+      <div class="objection">
+        <div class="q">這是直銷嗎？</div>
+        <div class="a">
+          <div class="label">SOUL 破解</div>
+          <p>「你知道 iPhone 怎麼賣的嗎？Apple 讓代理商和電信業者賣，再把利潤分給這些夥伴。美安也是這個邏輯——消費者透過平台購物，省下廣告費直接分給推薦人。更直接：Walmart、Nike、家樂福、誠品這些你認識的大品牌都在 SHOP.COM 上架。這不是騙局，是超連鎖——連鎖加盟邏輯 + 電商爆炸力。<em>你問的是很好的問題。謹慎的人才能做長久的事業。</em>」</p>
+        </div>
+      </div>
+      <div class="objection">
+        <div class="q">為什麼要自動購貨？我不想被強迫消費</div>
+        <div class="a">
+          <div class="label">SOUL 破解</div>
+          <p>「你每個月本來就在買洗髮精、保養品、維他命對嗎？自動購貨就是把你<em>原本就要花的錢，從別人的平台轉移到你自己的事業上</em>。不是額外支出，是轉移消費。自動購貨最重要的意義是：確保你每個月有穩定的 BV 進帳。就算你這個月很忙沒做任何零售，你的事業還在運轉。<em>這是事業的安全網，不是負擔。</em>」</p>
+        </div>
+      </div>
+      <div class="objection">
+        <div class="q">為什麼要去大會、一直上課？</div>
+        <div class="a">
+          <div class="label">SOUL 破解</div>
+          <p>「如果麥當勞從今天起不再培訓員工、不再開會，還能保持一致的水準嗎？美安的大會就是這個 SOP 系統。你去，你有整個系統幾十年的智慧。你不去，你只有你一個人的視角。還有 <em>ABC 槓桿</em>——你陪 10 個人去大會，等於你一個人幫這 10 個人的事業工作 30 小時。一個動作，10 倍效果。」</p>
+        </div>
+      </div>
+      <div class="objection">
+        <div class="q">我沒有錢、沒有時間</div>
+        <div class="a">
+          <div class="label">SOUL 破解</div>
+          <p>「你告訴我你沒有錢，這恰恰說明<em>你需要這個事業，而不是不需要</em>。問題不是『你現在有沒有錢』，而是『你要繼續沒有錢，還是用 1-2 年建立一個讓錢持續進來的系統？』美安啟動成本比任何傳統創業都低，不需要租店面、進貨、雇員工。唯一需要投資的是你自己的消費轉移——你本來就要花這些錢，只是換個地方花。」</p>
+        </div>
+      </div>
+      <div class="objection">
+        <div class="q">我朋友做過沒成功</div>
+        <div class="a">
+          <div class="label">SOUL 破解</div>
+          <p>「你身邊有開店失敗的朋友嗎？那開店這件事就是錯的嗎？任何事業都有人成功有人沒成功，差別在系統、複製、執行力、時機。你朋友是幾年前做的？當時 AI 還沒起來、自媒體還不發達、中國市場還沒開放——<em>今天不一樣了</em>。而且，最重要的是<em>他有我這個團隊陪他走嗎？</em>」</p>
+        </div>
+      </div>
+      <div class="objection">
+        <div class="q">我對自己沒信心 / 加入要兩萬五嗎？</div>
+        <div class="a">
+          <div class="label">SOUL 破解</div>
+          <p>「信心不是靠想出來的，是靠做出來的。你剛進現在的公司時有信心嗎？也是邊做邊累積的。我們有完整系統幫你——你不是一個人。至於費用，兩萬五是你一台 iPhone 的錢，但 iPhone 不會幫你賺錢，這個事業會。而且 <em>你也不是一次性就要投入，可以先從聯盟行銷開始賺到第一筆再說</em>。」</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 大師佐證 -->
+<section id="masters">
+  <div class="container">
+    <div class="section-title">
+      <div class="eyebrow">MASTER BACKING</div>
+      <h2>大師佐證系統</h2>
+      <p>張邁可為主軸・全球銷售大神為輔・用科學與實證支撐每一句 SOUL 話術</p>
+    </div>
+
+    <h3>◈ 第一層｜張邁可（Mike Chang）· 主軸心法</h3>
+    <div class="expert-quotes">
+      <div class="expert-card featured">
+        <h5>張邁可 Mike Chang</h5>
+        <div class="title">台灣 B2B 銷售教練・20 年服務 HSBC/IBM/台積電</div>
+        <div class="quote">「銷售是用問的，而不是用講的。」</div>
+        <div class="tech">佐證 SOUL 系統：S（Sense 洞察）= 張邁可的三階段提問挖痛點</div>
+      </div>
+      <div class="expert-card featured">
+        <h5>張邁可 · 配合度悖論</h5>
+        <div class="title">影片：《你不知道的業務真相》</div>
+        <div class="quote">「配合度越高的業務員，成交率居然越低。」</div>
+        <div class="tech">佐證 SOUL 紅燈區：不要當「奉承型業務」，要當「挑戰型顧問」</div>
+      </div>
+      <div class="expert-card featured">
+        <h5>張邁可 · 金額細分法</h5>
+        <div class="title">異議處理 SOP</div>
+        <div class="quote">「這個月 3 萬，看起來很多。但一天 1000，比一杯手搖飲加一個便當還少。你值不值得對自己投資這麼多？」</div>
+        <div class="tech">佐證 SOUL 的 L（Lead 引導）：金錢重新錨定</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3>◈ 第二層｜全球銷售大神群・補強</h3>
+    <div class="expert-quotes">
+      <div class="expert-card">
+        <h5>Eric Worre · Go Pro</h5>
+        <div class="title">全球直銷邀約系統之父</div>
+        <div class="quote">「如果我給你一個工具/系統，能讓你在 6 個月內達成 X，你會想看看嗎？」</div>
+        <div class="tech">佐證 SOUL 的「假設式推進」</div>
+      </div>
+      <div class="expert-card">
+        <h5>Robert Cialdini · 影響力六原則</h5>
+        <div class="title">《影響力》作者・社會心理學泰斗</div>
+        <div class="quote">互惠、承諾一致、社會認同、權威、喜好、稀缺——六大人性按鈕。</div>
+        <div class="tech">佐證 SOUL 的三大證據（社會認同）+ 產品課（權威）</div>
+      </div>
+      <div class="expert-card">
+        <h5>Jordan Belfort · 直線銷售</h5>
+        <div class="title">《華爾街之狼》原型・4 秒內建立三件事</div>
+        <div class="quote">「前 4 秒決定一切：你聰明、你熱情、你是專家。」</div>
+        <div class="tech">佐證 SOUL 的 O（Open 開信任）= 兩分鐘廣告前 4 秒</div>
+      </div>
+      <div class="expert-card">
+        <h5>Tony Robbins · NLP 教父</h5>
+        <div class="title">聚焦力 × 痛苦-快樂原則</div>
+        <div class="quote">「人做決定，只有兩個理由：逃離痛苦，追求快樂。」</div>
+        <div class="tech">佐證 SOUL 的深化三問：三個月後會怎樣？</div>
+      </div>
+      <div class="expert-card">
+        <h5>Donald Miller · StoryBrand</h5>
+        <div class="title">《訂製你的故事行銷》七步故事框架</div>
+        <div class="quote">「把客戶當主角，把自己當嚮導。不是你拯救他，是他透過你拯救自己。」</div>
+        <div class="tech">佐證 SOUL 的兩分鐘廣告結構</div>
+      </div>
+      <div class="expert-card">
+        <h5>Tom "Big Al" Schreiter</h5>
+        <div class="title">MLM 50 年實戰・破冰話術專家</div>
+        <div class="quote">「你會不會想多知道一個方法，讓你 xxx？」</div>
+        <div class="tech">佐證 SOUL 的四句成交模板的「推進」語法</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3>◈ 第三層｜美安最強講師・鎖死實戰</h3>
+    <div class="expert-quotes">
+      <div class="expert-card">
+        <h5>JR Ridinger · 美安創辦人</h5>
+        <div class="title">「嶄新的公司」信念轉化哲學</div>
+        <div class="quote">「勇敢夢想，因為我們不會大過我們的夢想。」</div>
+        <div class="tech">佐證兩分鐘廣告的「未來願景」段落</div>
+      </div>
+      <div class="expert-card">
+        <h5>Dennis Franks · 零售 10-15 回頭客系統</h5>
+        <div class="title">基礎 17 人強・51% 夥伴來自顧客</div>
+        <div class="quote">「零售不是旁枝，是主幹。現金流回收啟動資金，信念提升三到四個台階。」</div>
+        <div class="tech">佐證 SOUL 零售流程的結構設計</div>
+      </div>
+      <div class="expert-card">
+        <h5>Kevin Buckman · 領導力五層次</h5>
+        <div class="title">從職位到人才培養的蛻變</div>
+        <div class="quote">「最高層次的領導，是讓你的夥伴比你強。」</div>
+        <div class="tech">佐證 SOUL 招募流程的「不是招下線，是找夥伴」</div>
+      </div>
+      <div class="expert-card">
+        <h5>謝振宗 · 購物年金家庭 SOP</h5>
+        <div class="title">從數字到眼淚的落地實踐</div>
+        <div class="quote">把購物年金不只算成 BV，算成「20 年後每個月多拿到的生活費」。</div>
+        <div class="tech">佐證自動購貨抗拒破解</div>
+      </div>
+      <div class="expert-card">
+        <h5>Katherine Yin · 17 年副總裁</h5>
+        <div class="title">複製與領導哲學・創業五大態度</div>
+        <div class="quote">「複製不是做一樣的事，是傳遞一樣的信念。」</div>
+        <div class="tech">佐證轉介法的「讓對方試做」</div>
+      </div>
+      <div class="expert-card">
+        <h5>董宥均 · 複製的力量</h5>
+        <div class="title">系統才是真正的主角</div>
+        <div class="quote">「你不用是厲害的人，你只要會用厲害的系統。」</div>
+        <div class="tech">佐證 SOUL 系統化思維</div>
+      </div>
+      <div class="expert-card">
+        <h5>李峻豪醫師</h5>
+        <div class="title">TLS 全新生活・等滲透技術科學原理</div>
+        <div class="quote">數據支撐 Isotonix 吸收率比錠劑高 6-8 倍。</div>
+        <div class="tech">佐證三大證據的「萃取數據」</div>
+      </div>
+      <div class="expert-card">
+        <h5>吳柏樺 · 成功五要訣</h5>
+        <div class="title">自用、零售、跟進、推薦、複製</div>
+        <div class="quote">「五個環節缺一不可，但只要做好第一個，其他四個會自然發生。」</div>
+        <div class="tech">佐證 SOUL 零售為起點的設計邏輯</div>
+      </div>
+      <div class="expert-card">
+        <h5>黃鵬升 · 台灣創業家精神</h5>
+        <div class="title">從創業到超連鎖的心路</div>
+        <div class="quote">「這不是換工作，是建立一個可以傳承給下一代的資產。」</div>
+        <div class="tech">佐證危機意識的「下一代」視角</div>
+      </div>
+      <div class="expert-card">
+        <h5>Simon 柳元涵 · GMTSS 培訓系統</h5>
+        <div class="title">全球美安培訓架構深度版</div>
+        <div class="quote">「系統學習比經驗累積快 10 倍。」</div>
+        <div class="tech">佐證產品課邀約的權威感</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 流程圖 / 路徑圖 -->
+<section id="flowmap" style="padding:80px 24px;background:linear-gradient(180deg,#0a0a0f 0%,#14141d 100%)">
+  <div style="max-width:1200px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:48px">
+      <div style="color:var(--gold-2);letter-spacing:4px;font-size:13px;margin-bottom:12px">THE SOUL PATH MAP</div>
+      <h2 style="font-size:42px;background:linear-gradient(135deg,var(--gold-1),var(--gold-2),var(--gold-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0">SOUL 實戰路徑圖</h2>
+      <p style="color:var(--muted);margin-top:12px">一眼看懂從接觸到成交的完整路徑｜每一步都有下一步</p>
+    </div>
+
+    <!-- 第一層：選情境 -->
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="display:inline-block;padding:14px 28px;border:2px solid var(--gold-2);border-radius:999px;background:rgba(212,169,74,0.08);color:var(--gold-1);font-weight:700;letter-spacing:2px">🎯 START · 先選路徑</div>
+    </div>
+
+    <!-- 兩條主路徑分岔 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+      <!-- 直接法 -->
+      <div style="border:1px solid rgba(212,169,74,0.3);border-radius:16px;padding:24px;background:rgba(255,255,255,0.02)">
+        <div style="text-align:center;color:var(--gold-1);font-size:20px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(212,169,74,0.2)">🔵 直接法</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="padding:12px;background:rgba(212,169,74,0.08);border-left:3px solid var(--gold-2);border-radius:6px"><strong style="color:var(--gold-1)">① 發現痛點開場</strong><br><span style="color:var(--muted);font-size:13px">這問題多久了？之前試過什麼？</span></div>
+          <div style="text-align:center;color:var(--gold-3)">↓</div>
+          <div style="padding:12px;background:rgba(212,169,74,0.08);border-left:3px solid var(--gold-2);border-radius:6px"><strong style="color:var(--gold-1)">② 讚美過渡</strong><br><span style="color:var(--muted);font-size:13px">你這狀況其實還 OK，比很多人好</span></div>
+          <div style="text-align:center;color:var(--gold-3)">↓</div>
+          <div style="padding:12px;background:rgba(212,169,74,0.08);border-left:3px solid var(--gold-2);border-radius:6px"><strong style="color:var(--gold-1)">③ 1-10 分評分</strong><br><span style="color:var(--muted);font-size:13px">想解決的程度幾分？</span></div>
+          <div style="text-align:center;color:var(--gold-3)">↓</div>
+          <div style="padding:12px;background:rgba(245,217,138,0.12);border-left:3px solid var(--gold-1);border-radius:6px"><strong style="color:var(--gold-1)">④ 兩分鐘廣告 🔥</strong><br><span style="color:var(--muted);font-size:13px">原本→方法→現在→願景</span></div>
+          <div style="text-align:center;color:var(--gold-3)">↓</div>
+          <div style="padding:12px;background:rgba(212,169,74,0.08);border-left:3px solid var(--gold-2);border-radius:6px"><strong style="color:var(--gold-1)">⑤ 三大證據</strong><br><span style="color:var(--muted);font-size:13px">Before/After・數據・產品課</span></div>
+          <div style="text-align:center;color:var(--gold-3)">↓</div>
+          <div style="padding:12px;background:rgba(245,217,138,0.18);border-left:3px solid var(--gold-1);border-radius:6px"><strong style="color:var(--gold-1)">⑥ 產品課邀約（二選一）</strong><br><span style="color:var(--muted);font-size:13px">ABC 借力・成功率最高</span></div>
+        </div>
+      </div>
+
+      <!-- 轉介法 -->
+      <div style="border:1px solid rgba(212,169,74,0.3);border-radius:16px;padding:24px;background:rgba(255,255,255,0.02)">
+        <div style="text-align:center;color:var(--gold-1);font-size:20px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(212,169,74,0.2)">🟡 轉介法（聯盟行銷）</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="padding:12px;background:rgba(212,169,74,0.08);border-left:3px solid var(--gold-2);border-radius:6px"><strong style="color:var(--gold-1)">① 降壓力開場</strong><br><span style="color:var(--muted);font-size:13px">我有個工具想請你體驗，非關推銷</span></div>
+          <div style="text-align:center;color:var(--gold-3)">↓</div>
+          <div style="padding:12px;background:rgba(212,169,74,0.08);border-left:3px solid var(--gold-2);border-radius:6px"><strong style="color:var(--gold-1)">② 提出雙贏結構</strong><br><span style="color:var(--muted);font-size:13px">10% 利潤分潤・你的朋友也受惠</span></div>
+          <div style="text-align:center;color:var(--gold-3)">↓</div>
+          <div style="padding:12px;background:rgba(212,169,74,0.08);border-left:3px solid var(--gold-2);border-radius:6px"><strong style="color:var(--gold-1)">③ 試做一次</strong><br><span style="color:var(--muted);font-size:13px">讓對方先用、先感受</span></div>
+          <div style="text-align:center;color:var(--gold-3)">↓</div>
+          <div style="padding:12px;background:rgba(245,217,138,0.12);border-left:3px solid var(--gold-1);border-radius:6px"><strong style="color:var(--gold-1)">④ 兩分鐘廣告 🔥</strong><br><span style="color:var(--muted);font-size:13px">同步融入，不強推</span></div>
+          <div style="text-align:center;color:var(--gold-3)">↓</div>
+          <div style="padding:12px;background:rgba(212,169,74,0.08);border-left:3px solid var(--gold-2);border-radius:6px"><strong style="color:var(--gold-1)">⑤ 八二法則鋪陳</strong><br><span style="color:var(--muted);font-size:13px">80% 朋友分潤・20% 深入合作</span></div>
+          <div style="text-align:center;color:var(--gold-3)">↓</div>
+          <div style="padding:12px;background:rgba(245,217,138,0.18);border-left:3px solid var(--gold-1);border-radius:6px"><strong style="color:var(--gold-1)">⑥ 自然進入 ABC</strong><br><span style="color:var(--muted);font-size:13px">從合夥人升級為事業夥伴</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 匯流：SOUL 四核心滲透每一步 -->
+    <div style="text-align:center;margin:32px 0 24px">
+      <div style="color:var(--gold-3);letter-spacing:3px;font-size:12px;margin-bottom:12px">每一步都要融入 ↓</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px">
+      <div style="padding:16px;text-align:center;border:1px solid var(--gold-3);border-radius:12px;background:rgba(212,169,74,0.05)"><div style="font-size:24px;color:var(--gold-1);font-weight:900">S</div><div style="color:var(--muted);font-size:12px">Sense 洞察</div></div>
+      <div style="padding:16px;text-align:center;border:1px solid var(--gold-3);border-radius:12px;background:rgba(212,169,74,0.05)"><div style="font-size:24px;color:var(--gold-1);font-weight:900">O</div><div style="color:var(--muted);font-size:12px">Open 開啟</div></div>
+      <div style="padding:16px;text-align:center;border:1px solid var(--gold-3);border-radius:12px;background:rgba(212,169,74,0.05)"><div style="font-size:24px;color:var(--gold-1);font-weight:900">U</div><div style="color:var(--muted);font-size:12px">Understand 深化</div></div>
+      <div style="padding:16px;text-align:center;border:1px solid var(--gold-3);border-radius:12px;background:rgba(212,169,74,0.05)"><div style="font-size:24px;color:var(--gold-1);font-weight:900">L</div><div style="color:var(--muted);font-size:12px">Lead 引導</div></div>
+    </div>
+
+    <!-- 下一步行動 -->
+    <div style="border:2px solid var(--gold-2);border-radius:20px;padding:32px;background:linear-gradient(135deg,rgba(212,169,74,0.1),rgba(245,217,138,0.05))">
+      <div style="text-align:center;color:var(--gold-1);font-size:22px;font-weight:700;margin-bottom:24px">🚀 你的下一步（三選一）</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div style="padding:20px;background:rgba(0,0,0,0.3);border-radius:12px;border-top:3px solid var(--gold-1)"><div style="color:var(--gold-1);font-weight:700;margin-bottom:8px">① 今晚就做</div><div style="color:var(--muted);font-size:13px">寫下你自己的「兩分鐘廣告」四段結構，對著鏡子練三次</div></div>
+        <div style="padding:20px;background:rgba(0,0,0,0.3);border-radius:12px;border-top:3px solid var(--gold-1)"><div style="color:var(--gold-1);font-weight:700;margin-bottom:8px">② 本週內</div><div style="color:var(--muted);font-size:13px">選 3 位名單，用直接法或轉介法開場，目標：1 場產品課邀約成功</div></div>
+        <div style="padding:20px;background:rgba(0,0,0,0.3);border-radius:12px;border-top:3px solid var(--gold-1)"><div style="color:var(--gold-1);font-weight:700;margin-bottom:8px">③ 本月內</div><div style="color:var(--muted);font-size:13px">30 招提問輪流實戰，累積 10 場 ABC，數據化追蹤每一個節點轉換率</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="brand">SOUL · THE SALES SYSTEM BY CHEN PO-WEI</p>
+  <p>© 2026 陳柏維（柏維哥）× OMNI 宇宙最強智囊團</p>
+  <p>Version 1.0 · 2026-04-15 · Built with 三套邏輯融合方法論</p>
+  <p style="margin-top:16px;color:var(--gold-3)">「我們不是聊天，我們是一起登頂。」</p>
+</footer>
+
+</body>
+</html>
