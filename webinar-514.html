@@ -338,6 +338,26 @@ body {
 .event-duration {
   margin-top:6px; font-size:13px; color:rgba(245,242,237,0.65); letter-spacing:5px;
 }
+
+/* ════════════ 方案 A 入場動畫（6 秒序列，end-state = 靜態 EDM）════════════ */
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+@keyframes zoomIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
+@keyframes glowGold { 0%,100%{filter:drop-shadow(0 4px 16px rgba(212,175,55,0.5))} 50%{filter:drop-shadow(0 4px 32px rgba(212,175,55,0.9))} }
+
+.hook { animation: fadeUp 0.7s ease-out 0.2s both; }
+.hero-wrap { animation: fadeUp 0.7s ease-out 0.8s both; }
+.slogan-block { animation: fadeUp 0.6s ease-out 1.5s both; }
+.five-d-title { animation: zoomIn 0.7s ease-out 2.2s both; }
+.five-d-en { animation: fadeUp 0.5s ease-out 2.6s both; }
+.dim:nth-child(1) { animation: fadeUp 0.4s ease-out 3.0s both; }
+.dim:nth-child(2) { animation: fadeUp 0.4s ease-out 3.2s both; }
+.dim:nth-child(3) { animation: fadeUp 0.4s ease-out 3.4s both; }
+.dim:nth-child(4) { animation: fadeUp 0.4s ease-out 3.6s both; }
+.dim:nth-child(5) { animation: fadeUp 0.4s ease-out 3.8s both; }
+.why-allen { animation: fadeUp 0.6s ease-out 4.4s both; }
+.middle-row { animation: fadeUp 0.6s ease-out 5.0s both; }
+.event-block { animation: zoomIn 0.7s ease-out 5.6s both, glowGold 2.5s ease-in-out 6.5s infinite; }
+
 </style>
 </head>
 <body>
@@ -409,33 +429,4 @@ body {
     </div>
   </div>
 
-  <!-- 為什麼是 Allen -->
-  <div class="why-allen">
-    <div class="why-allen-text">
-      這 5 個維度，每一個領域<b>都有頂尖的老師</b><br>
-      但要把 5 個維度<b>全部整合在一起</b>，且每一個都做得好<br>
-      <b>全亞洲，只有 Allen柏維哥做得到</b>
-    </div>
-  </div>
-
-  <!-- 中段並排：IG 圖左（320px 固定）+ 痛點右 -->
-  <div class="middle-row">
-    <div class="ig-original">
-      <div class="ig-tag-bar">IG｜4.2 萬粉絲認證</div>
-      <div class="ig-img-bg" role="img" aria-label="Allen IG 簡介 4.2 萬粉絲"></div>
-    </div>
-    <div class="pain-col">
-      <div class="pain-section">
-        <div class="pain-title">這場研討會，為你而辦</div>
-        <ul class="pain-list">
-          <li>你是<b>保險業務、直銷業務</b>，名單枯竭、成交率低？</li>
-          <li>你是<b>線上課程講師</b>，流量見頂、轉換不易？</li>
-          <li>你是<b>上班族</b>，想穩定增加業外收入？</li>
-        </ul>
-        <div class="pain-deal">
-          或你正在思考 ——<br>
-          如何用<b>自己的故事</b>打造系統化收入<br>
-          如何學 <b>AI ／ 自媒體 ／ 銷售</b><br>
-          如何讓 <b>AI 成為智囊團與代理團隊</b>
-        </div>
-        <div cla
+  <!-- 
