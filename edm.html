@@ -301,12 +301,14 @@ body {
 
 /* ─── 5/14 框（5 跟 14 同大）─── */
 .event-block {
-  margin:28px 50px 40px; padding:26px 32px;
-  background:linear-gradient(135deg, rgba(212,175,55,0.22), rgba(212,175,55,0.06));
-  border:2px solid var(--gold-base); border-radius:18px;
-  text-align:center;
-  box-shadow:0 0 50px rgba(212,175,55,0.25);
-  position:relative;
+  margin:18px 50px 30px !important; padding:26px 50px !important;
+  background:linear-gradient(135deg, rgba(212,175,55,0.22), rgba(212,175,55,0.06)) !important;
+  border:2px solid var(--gold-base) !important; border-radius:18px !important;
+  box-shadow:0 0 50px rgba(212,175,55,0.25) !important;
+  position:relative !important;
+  display:flex !important; flex-direction:row !important;
+  align-items:center !important; justify-content:flex-start !important; gap:60px !important;
+  text-align:left !important;
 }
 .event-block::before {
   content:'⚡ 首場限定 · 不公開重播 ⚡';
@@ -315,13 +317,7 @@ body {
   font-size:12px; font-weight:900; letter-spacing:3px;
   border:1px solid #e63946; border-radius:100px;
 }
-.event-date {
-  font-family:'Noto Serif TC', serif; font-weight:900;
-  font-size:96px; line-height:1; letter-spacing:-2px;
-  background:var(--gold-gradient);
-  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 4px 16px rgba(212,175,55,0.5));
-}
+.event-date { font-family:'Noto Serif TC', serif; font-weight:900; font-size:88px; line-height:1; letter-spacing:-2px; background:var(--gold-gradient); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 4px 16px rgba(212,175,55,0.5)); }
 .event-weekday { display:inline-block; padding:5px 14px; border:1px solid var(--gold-base); border-radius:6px; color:var(--gold-base); font-size:20px; font-weight:700; letter-spacing:3px; font-family:'Noto Sans TC', sans-serif; margin-bottom:8px; }
 .event-time { font-size:32px; font-weight:700; color:#fff; letter-spacing:3px; margin:0; }
 .event-duration { font-size:14px; color:rgba(245,242,237,0.65); letter-spacing:5px; margin-top:6px; }
