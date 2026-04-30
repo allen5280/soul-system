@@ -42,7 +42,7 @@ body {
 
 /* ─── HOOK（更大、往下移） ─── */
 .hook {
-  margin:74px 50px 0; text-align:center;
+  margin:30px 50px 0; text-align:center;
 }
 .hook-title {
   font-family:'Noto Serif TC', serif;
@@ -120,8 +120,7 @@ body {
 }
 
 /* ─── Slogan（字縮小變兩行） ─── */
-.slogan-block {
-  margin:14px 50px 0; padding:22px 32px 24px;
+.slogan-block { margin:14px 0 0; padding:22px 32px 24px;
   background:linear-gradient(180deg, rgba(0,0,0,0.85), rgba(212,175,55,0.06) 100%);
   border-radius:16px;
   border:1px solid rgba(212,175,55,0.25);
@@ -154,7 +153,7 @@ body {
   text-align:center;
   font-family:'Noto Serif TC', serif;
   font-weight:900;
-  font-size:80px;
+  font-size:72px;
   letter-spacing:8px;
   background:var(--gold-gradient);
   -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
@@ -180,13 +179,17 @@ body {
   content:''; position:absolute; top:0; left:0; right:0; height:2px;
   background:linear-gradient(90deg, transparent, var(--gold-base), transparent);
 }
-.dim .icon { font-size:36px; margin-bottom:6px; }
+.dim {
+  padding:24px 12px !important;
+}
+.dim-head { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; }
+.dim .icon { font-size:24px; margin:0; }
 .dim .num {
-  font-size:13px; letter-spacing:2px; font-weight:900;
+  font-size:18px; letter-spacing:2px; font-weight:900;
   background:var(--gold-gradient);
   -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
 }
-.dim .name { font-size:16px; font-weight:700; line-height:1.35; margin-top:4px; color:var(--white); }
+.dim .name { font-size:22px; font-weight:900; line-height:1.25; color:var(--white); padding:0 4px; }
 
 /* ─── 為什麼是 Allen ─── */
 .why-allen {
@@ -256,8 +259,7 @@ body {
 .pain-col {
   display:flex; flex-direction:column;
 }
-.pain-section {
-  padding:22px 22px;
+.pain-section { padding:18px 22px;
   background:linear-gradient(180deg, rgba(230,57,70,0.08), transparent);
   border:1px solid rgba(230,57,70,0.25);
   border-radius:14px;
@@ -271,10 +273,7 @@ body {
   letter-spacing:3px; margin-bottom:14px; text-align:center;
 }
 .pain-list { list-style:none; }
-.pain-list li {
-  font-size:16px; line-height:1.7; color:rgba(245,242,237,0.95);
-  padding:5px 0 5px 26px; position:relative;
-}
+.pain-list li { padding:7px 0 7px 28px; position:relative; font-size:18px; line-height:1.55; color:rgba(245,242,237,0.95); }
 .pain-list li::before {
   content:'▸'; position:absolute; left:6px; color:var(--gold-base); font-weight:900; font-size:18px;
 }
@@ -323,21 +322,9 @@ body {
   -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
   filter:drop-shadow(0 4px 16px rgba(212,175,55,0.5));
 }
-.event-weekday {
-  display:inline-block;
-  margin-top:14px; padding:6px 16px;
-  border:1px solid var(--gold-base); border-radius:6px;
-  color:var(--gold-base); font-size:22px; font-weight:700;
-  letter-spacing:3px;
-  font-family:'Noto Sans TC', sans-serif;
-}
-.event-time {
-  margin-top:12px; font-size:32px; font-weight:700; color:#fff;
-  letter-spacing:3px;
-}
-.event-duration {
-  margin-top:6px; font-size:13px; color:rgba(245,242,237,0.65); letter-spacing:5px;
-}
+.event-weekday { display:inline-block; padding:5px 14px; border:1px solid var(--gold-base); border-radius:6px; color:var(--gold-base); font-size:20px; font-weight:700; letter-spacing:3px; font-family:'Noto Sans TC', sans-serif; margin-bottom:8px; }
+.event-time { font-size:32px; font-weight:700; color:#fff; letter-spacing:3px; margin:0; }
+.event-duration { font-size:14px; color:rgba(245,242,237,0.65); letter-spacing:5px; margin-top:6px; }
 
 /* 動畫已移除 — 純靜態確保 100% 顯示完整 */
 </style>
@@ -369,43 +356,38 @@ body {
         <div class="item">13 年業務銷售與團隊領導</div>
         <div class="item">前大立光電 資深研發工程師</div>
       </div>
+      <div class="slogan-block">
+          <div class="slogan-line line1">
+            彎路我都走完了，<span class="gold-strong">學費我都繳完了</span>
+          </div>
+          <div class="slogan-line">
+            最快直達的高鐵已經為你開動<br>
+            你不必再研發，<span class="gold-strong">你只要上車</span>
+          </div>
+        </div>
     </div>
   </div>
 
-  <!-- Slogan -->
-  <div class="slogan-block">
-    <div class="slogan-line line1">
-      彎路我都走完了，<span class="gold-strong">學費我都繳完了</span>
-    </div>
-    <div class="slogan-line">
-      最快直達的高鐵已經為你開動<br>
-      你不必再研發，<span class="gold-strong">你只要上車</span>
-    </div>
-  </div>
+  
 
   <!-- 五維變現引擎 -->
   <div class="five-d-section">
     <div class="five-d-title">五維變現引擎</div>
     <div class="five-d-en">5D WEALTH ENGINE</div>
     <div class="five-d-grid">
-      <div class="dim">
-        <div class="icon">🤖</div><div class="num">維度 1</div>
+      <div class="dim"><div class="dim-head"><div class="icon">🤖</div><div class="num">維度 1</div></div>
         <div class="name">AI 智囊團<br>＋ 代理團隊</div>
       </div>
-      <div class="dim">
-        <div class="icon">📱</div><div class="num">維度 2</div>
+      <div class="dim"><div class="dim-head"><div class="icon">📱</div><div class="num">維度 2</div></div>
         <div class="name">自媒體品牌<br>＋ 名單引擎</div>
       </div>
-      <div class="dim">
-        <div class="icon">📖</div><div class="num">維度 3</div>
+      <div class="dim"><div class="dim-head"><div class="icon">📖</div><div class="num">維度 3</div></div>
         <div class="name">故事行銷<br>變現模板</div>
       </div>
-      <div class="dim">
-        <div class="icon">💬</div><div class="num">維度 4</div>
+      <div class="dim"><div class="dim-head"><div class="icon">💬</div><div class="num">維度 4</div></div>
         <div class="name">銷售成交<br>SOUL 系統</div>
       </div>
-      <div class="dim">
-        <div class="icon">💎</div><div class="num">維度 5</div>
+      <div class="dim"><div class="dim-head"><div class="icon">💎</div><div class="num">維度 5</div></div>
         <div class="name">商業模式<br>＋ 複利策略</div>
       </div>
     </div>
@@ -414,9 +396,8 @@ body {
   <!-- 為什麼是 Allen -->
   <div class="why-allen">
     <div class="why-allen-text">
-      這 5 個維度，每一個領域<b>都有頂尖的老師</b><br>
-      但要把 5 個維度<b>全部整合在一起</b>，且每一個都做得好<br>
-      <b>全亞洲，只有 Allen柏維哥做得到</b>
+      五個維度，每個領域都有<b>頂尖專家</b>，但要<b>全部整合在一起</b>，且都做得好<br>
+      <b>全亞洲，只有 Allen 柏維哥做得到</b>
     </div>
   </div>
 
@@ -428,7 +409,6 @@ body {
     </div>
     <div class="pain-col">
       <div class="pain-section">
-        <div class="pain-title">這場研討會，為你而辦</div>
         <ul class="pain-list">
           <li>你是<b>保險業務、直銷業務</b>，名單枯竭、成交率低？</li>
           <li>你是<b>線上課程講師</b>，流量見頂、轉換不易？</li>
@@ -437,23 +417,25 @@ body {
         <div class="pain-deal">
           或你正在思考 ——<br>
           如何用<b>自己的故事</b>打造系統化收入<br>
-          如何學 <b>AI ／ 自媒體 ／ 銷售</b><br>
-          如何讓 <b>AI 成為智囊團與代理團隊</b>
+          如何學 <b>AI ／ 自媒體 ／ 銷售</b>，讓 <b>AI 成為智囊團與代理團隊</b>
         </div>
-        <div class="pain-final">把握這場活動，你會得到所有答案</div>
+        <div class="pain-final">把握這場培訓，你會得到所有答案</div>
       </div>
     </div>
   </div>
 
-  <!-- 5/14 日期框（5 跟 14 同大，週三置中下方） -->
+  <!-- 5/14 日期框（左右並排） -->
   <div class="event-block">
-    <div class="event-date">5 / 14</div>
-    <div class="event-weekday">週三</div>
-    <div class="event-time">20:30 — 21:30</div>
-    <div class="event-duration">60 MINUTES｜LIVE ONLINE</div>
+    <div class="event-left">
+      <div class="event-date">5 / 14</div>
+    </div>
+    <div class="event-right">
+      <div class="event-weekday">週三</div>
+      <div class="event-time">20:30 — 21:30</div>
+      <div class="event-duration">60 MINUTES｜LIVE ONLINE</div>
+    </div>
   </div>
-
-</div>
+  </div>
 
 </body>
 </html>
