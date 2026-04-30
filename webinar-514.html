@@ -213,17 +213,13 @@ body {
 }
 
 /* ─── 中段並排：IG 原圖左 + 痛點右 ─── */
-.ig-block {
+/* 並排但 IG 圖固定 320px 寬（避免拉長 + 不截切） */
+.middle-row {
+  display:grid;
+  grid-template-columns: 320px 1fr;
+  gap:20px;
+  align-items:start;
   margin:28px 50px 0;
-  display:flex;
-  justify-content:center;
-}
-.ig-block .ig-original {
-  width:100%;
-  max-width:560px;
-}
-.pain-row {
-  margin:24px 50px 0;
 }
 .ig-original {
   background:#fff;
@@ -414,30 +410,28 @@ body {
     </div>
   </div>
 
-  <!-- IG 公信力證據（獨立完整 row，居中顯示） -->
-  <div class="ig-block">
+  <!-- 中段並排：IG 圖左（320px 固定）+ 痛點右 -->
+  <div class="middle-row">
     <div class="ig-original">
       <div class="ig-tag-bar">IG｜4.2 萬粉絲認證</div>
-      <img src="ig_profile.jpg" alt="Allen IG 簡介 4.2 萬粉絲">
+      <img src="ig_v2.jpg" alt="Allen IG 簡介 4.2 萬粉絲">
     </div>
-  </div>
-
-  <!-- 痛點區塊（獨立 row） -->
-  <div class="pain-row">
-    <div class="pain-section">
-      <div class="pain-title">這場研討會，為你而辦</div>
-      <ul class="pain-list">
-        <li>你是<b>保險業務、直銷業務</b>，名單枯竭、成交率低？</li>
-        <li>你是<b>線上課程講師</b>，流量見頂、轉換不易？</li>
-        <li>你是<b>上班族</b>，想穩定增加業外收入？</li>
-      </ul>
-      <div class="pain-deal">
-        或你正在思考 ——<br>
-        如何用<b>自己的故事</b>打造系統化收入<br>
-        如何學 <b>AI ／ 自媒體 ／ 銷售</b><br>
-        如何讓 <b>AI 成為智囊團與代理團隊</b>
+    <div class="pain-col">
+      <div class="pain-section">
+        <div class="pain-title">這場研討會，為你而辦</div>
+        <ul class="pain-list">
+          <li>你是<b>保險業務、直銷業務</b>，名單枯竭、成交率低？</li>
+          <li>你是<b>線上課程講師</b>，流量見頂、轉換不易？</li>
+          <li>你是<b>上班族</b>，想穩定增加業外收入？</li>
+        </ul>
+        <div class="pain-deal">
+          或你正在思考 ——<br>
+          如何用<b>自己的故事</b>打造系統化收入<br>
+          如何學 <b>AI ／ 自媒體 ／ 銷售</b><br>
+          如何讓 <b>AI 成為智囊團與代理團隊</b>
+        </div>
+        <div class="pain-final">把握這場活動，你會得到所有答案</div>
       </div>
-      <div class="pain-final">把握這場活動，你會得到所有答案</div>
     </div>
   </div>
 
@@ -445,5 +439,4 @@ body {
   <div class="event-block">
     <div class="event-date">5 / 14</div>
     <div class="event-weekday">週三</div>
-    <div class="event-time">20:30 — 21:30</div>
-    <
+    <div class="event-time">20:30 — 21:30<
