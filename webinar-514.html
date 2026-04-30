@@ -240,8 +240,16 @@ body {
   position:relative;
   z-index:2;
 }
-.ig-original img {
-  width:100%; height:auto; display:block;
+/* 用 background-image + padding-top 比例強制
+   100% 杜絕任何瀏覽器的高度計算誤差或 MIME type 截切 */
+.ig-img-bg {
+  width:100%;
+  padding-top:93.5%; /* IG 圖實際比例 1205:1127 */
+  background-image:url('ig_v3.png');
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:top center;
+  background-color:#fff;
   border-radius:0 0 16px 16px;
 }
 
@@ -414,7 +422,7 @@ body {
   <div class="middle-row">
     <div class="ig-original">
       <div class="ig-tag-bar">IG｜4.2 萬粉絲認證</div>
-      <img src="ig_v2.jpg" alt="Allen IG 簡介 4.2 萬粉絲">
+      <div class="ig-img-bg" role="img" aria-label="Allen IG 簡介 4.2 萬粉絲"></div>
     </div>
     <div class="pain-col">
       <div class="pain-section">
@@ -430,13 +438,4 @@ body {
           如何學 <b>AI ／ 自媒體 ／ 銷售</b><br>
           如何讓 <b>AI 成為智囊團與代理團隊</b>
         </div>
-        <div class="pain-final">把握這場活動，你會得到所有答案</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5/14 日期框（5 跟 14 同大，週三置中下方） -->
-  <div class="event-block">
-    <div class="event-date">5 / 14</div>
-    <div class="event-weekday">週三</div>
-    <div class="event-time">20:30 — 21:30<
+        <div cla
