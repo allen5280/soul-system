@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5/14 五維變現引擎 線上研討會 ｜ Allen 陳柏維</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold-gradient: linear-gradient(135deg, #fff5b8 0%, #f5e27a 25%, #d4af37 50%, #f0c040 75%, #c8921a 100%);
+  --gold-base: #d4af37;
+  --gold-bright: #f5e27a;
+  --bg: #06060a;
+  --bg-2: #0d0d16;
+  --white: #f5f2ed;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+body {
+  background:#000;
+  font-family:'Noto Sans TC', system-ui, sans-serif;
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  padding:20px;
+}
+.edm {
+  width:1080px; max-width:100%;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 8%, rgba(212,175,55,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 30% at 50% 95%, rgba(212,175,55,0.12) 0%, transparent 60%),
+    linear-gradient(180deg, #06060a 0%, #0d0d16 50%, #06060a 100%);
+  position:relative; overflow:hidden; color:var(--white);
+  border-radius:24px;
+  box-shadow:0 0 80px rgba(212,175,55,0.18);
+}
+.edm::before {
+  content:''; position:absolute; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:0.04; pointer-events:none; z-index:1;
+}
+.edm > * { position:relative; z-index:2; }
+
+/* ─── HOOK（更大、往下移） ─── */
+.hook {
+  margin:50px 50px 0; text-align:center;
+}
+.hook-title {
+  font-family:'Noto Serif TC', serif;
+  font-weight:900; font-size:64px; line-height:1.18; letter-spacing:-1.5px;
+  white-space:nowrap;
+}
+.hook-title .ai-out {
+  background:linear-gradient(135deg, #555, #888 50%, #555);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  position:relative; padding:0 4px;
+}
+.hook-title .ai-out::after {
+  content:''; position:absolute; left:0; right:0; top:55%; height:7px;
+  background:#e63946; transform:rotate(-2deg);
+}
+.hook-title .vs {
+  font-size:38px; color:var(--gold-base); font-weight:700; vertical-align:middle; margin:0 4px;
+}
+.hook-title .ai-win {
+  font-family:'Noto Serif TC', serif; font-weight:900;
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  text-shadow:0 0 50px rgba(212,175,55,0.55);
+}
+.hook-sub {
+  margin-top:6px; font-size:30px; color:rgba(245,242,237,0.95);
+  letter-spacing:4px; font-weight:400;
+}
+
+/* ─── Allen 主視覺（縮小+人物齊平） ─── */
+.hero-wrap {
+  display:flex; align-items:flex-start;
+  margin:4px 50px 0; gap:24px;
+}
+.allen-photo-col {
+  width:300px; flex-shrink:0;
+  position:relative;
+  margin-bottom:-16px;
+}
+.allen-photo-col img {
+  width:100%; height:auto; display:block;
+  filter:drop-shadow(0 0 24px rgba(212,175,55,0.22)) drop-shadow(0 6px 16px rgba(0,0,0,0.55));
+}
+.allen-info {
+  flex:1; padding-top:50px; /* 往下移，與照片中段人物齊平 */
+}
+.allen-name {
+  display:flex; align-items:flex-end; gap:16px; margin-bottom:24px;
+}
+.allen-name-zh {
+  font-family:'Noto Serif TC', serif; font-weight:900;
+  font-size:80px; line-height:0.95;
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 4px 12px rgba(212,175,55,0.35));
+  letter-spacing:-2px;
+}
+.allen-name-en {
+  font-family:'Noto Serif TC', serif; font-weight:400;
+  font-size:34px;
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  letter-spacing:1px; padding-bottom:8px;
+}
+.allen-creds {
+  font-size:20px; line-height:1.95; color:var(--white);
+  font-weight:400;
+}
+.allen-creds .item {
+  display:flex; align-items:center; gap:14px; margin-bottom:6px;
+}
+.allen-creds .item::before {
+  content:''; width:26px; height:2px; background:var(--gold-base); flex-shrink:0;
+  box-shadow:0 0 10px rgba(212,175,55,0.6);
+}
+
+/* ─── Slogan（字縮小變兩行） ─── */
+.slogan-block { margin:14px 0 0; padding:22px 32px 24px;
+  background:linear-gradient(180deg, rgba(0,0,0,0.85), rgba(212,175,55,0.06) 100%);
+  border-radius:16px;
+  border:1px solid rgba(212,175,55,0.25);
+  position:relative;
+  text-align:center;
+}
+.slogan-block::before {
+  content:'"'; position:absolute; top:-8px; left:24px;
+  font-size:54px; color:rgba(212,175,55,0.35); font-family:Georgia;
+}
+.slogan-line {
+  font-family:'Noto Serif TC', serif;
+  font-size:22px; line-height:1.5; font-weight:500;
+  color:var(--white);
+  letter-spacing:0.5px;
+}
+.slogan-line.line1 { margin-bottom:6px; }
+.slogan-line .gold-strong {
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  font-weight:900;
+  filter:drop-shadow(0 2px 8px rgba(212,175,55,0.4));
+}
+
+/* ─── 五維變現引擎大標 ─── */
+.five-d-section {
+  margin:30px 50px 0;
+}
+.five-d-title {
+  text-align:center;
+  font-family:'Noto Serif TC', serif;
+  font-weight:900;
+  font-size:72px;
+  letter-spacing:8px;
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 4px 16px rgba(212,175,55,0.4));
+  line-height:1.1;
+}
+.five-d-en {
+  text-align:center;
+  font-size:13px; letter-spacing:10px; color:rgba(212,175,55,0.65);
+  margin-top:6px; font-weight:300;
+}
+.five-d-grid {
+  display:grid; grid-template-columns:repeat(5,1fr); gap:10px;
+  margin-top:18px;
+}
+.dim {
+  background:linear-gradient(180deg, rgba(212,175,55,0.12), rgba(0,0,0,0.4));
+  border:1px solid rgba(212,175,55,0.32); border-radius:12px;
+  padding:18px 6px; text-align:center;
+  position:relative; overflow:hidden;
+}
+.dim::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, transparent, var(--gold-base), transparent);
+}
+.dim {
+  padding:24px 12px !important;
+}
+.dim-head { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; }
+.dim .icon { font-size:24px; margin:0; }
+.dim .num {
+  font-size:18px; letter-spacing:2px; font-weight:900;
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+.dim .name { font-size:22px; font-weight:900; line-height:1.25; color:var(--white); padding:0 4px; }
+
+/* ─── 為什麼是 Allen ─── */
+.why-allen {
+  margin:24px 50px 0; padding:24px 28px;
+  background:linear-gradient(135deg, rgba(212,175,55,0.10), rgba(0,0,0,0.4));
+  border:1px solid rgba(212,175,55,0.30);
+  border-radius:16px;
+  text-align:center;
+  position:relative;
+}
+.why-allen::before {
+  content:'⭐ 唯一整合者 ⭐'; position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+  background:var(--bg); color:var(--gold-base); padding:4px 16px;
+  font-size:12px; font-weight:900; letter-spacing:3px;
+  border:1px solid var(--gold-base); border-radius:100px;
+}
+.why-allen-text {
+  font-size:19px; line-height:1.8; color:var(--white); font-weight:400;
+}
+.why-allen-text b {
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  font-weight:900;
+}
+
+/* ─── 中段並排：IG 原圖左 + 痛點右 ─── */
+/* 並排但 IG 圖固定 320px 寬（避免拉長 + 不截切） */
+.middle-row {
+  display:grid;
+  grid-template-columns: 320px 1fr;
+  gap:20px;
+  align-items:start;
+  margin:28px 50px 0;
+}
+.ig-original {
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 12px 40px rgba(212,175,55,0.28), 0 0 0 2px var(--gold-base);
+  position:relative;
+  /* 移除 overflow:hidden，徹底防截切 */
+}
+.ig-tag-bar {
+  background:linear-gradient(135deg, #fff5b8 0%, #f5e27a 25%, #d4af37 50%, #f0c040 75%, #c8921a 100%);
+  color:#1a1a1a;
+  padding:11px 14px;
+  font-size:13px; font-weight:900;
+  letter-spacing:3px; text-align:center;
+  text-shadow:0 1px 1px rgba(255,255,255,0.4);
+  border-bottom:2px solid rgba(0,0,0,0.15);
+  border-radius:18px 18px 0 0;
+  position:relative;
+  z-index:2;
+}
+/* 用 background-image + padding-top 比例強制
+   100% 杜絕任何瀏覽器的高度計算誤差或 MIME type 截切 */
+.ig-img-bg {
+  width:100%;
+  padding-top:93.5%; /* IG 圖實際比例 1205:1127 */
+  background-image:url('ig_v4.png');
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:top center;
+  background-color:#fff;
+  border-radius:0 0 16px 16px;
+}
+
+.pain-col {
+  display:flex; flex-direction:column;
+}
+.pain-section { padding:18px 22px;
+  background:linear-gradient(180deg, rgba(230,57,70,0.08), transparent);
+  border:1px solid rgba(230,57,70,0.25);
+  border-radius:14px;
+  flex:1;
+  display:flex; flex-direction:column; justify-content:center;
+}
+.pain-title {
+  font-size:22px; font-weight:900;
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  letter-spacing:3px; margin-bottom:14px; text-align:center;
+}
+.pain-list { list-style:none; }
+.pain-list li { padding:7px 0 7px 28px; position:relative; font-size:18px; line-height:1.55; color:rgba(245,242,237,0.95); }
+.pain-list li::before {
+  content:'▸'; position:absolute; left:6px; color:var(--gold-base); font-weight:900; font-size:18px;
+}
+.pain-list li b {
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  font-weight:900;
+}
+.pain-deal {
+  margin-top:12px; padding-top:10px; border-top:1px dashed rgba(212,175,55,0.35);
+  font-size:14px; line-height:1.7; color:rgba(245,242,237,0.92); text-align:center;
+  font-weight:300;
+}
+.pain-deal b {
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  font-weight:700;
+}
+.pain-final {
+  margin-top:10px; font-size:20px; font-weight:900;
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  letter-spacing:2px; text-align:center;
+}
+
+/* ─── 5/14 框（5 跟 14 同大）─── */
+.event-block {
+  margin:28px 50px 40px; padding:26px 32px;
+  background:linear-gradient(135deg, rgba(212,175,55,0.22), rgba(212,175,55,0.06));
+  border:2px solid var(--gold-base); border-radius:18px;
+  text-align:center;
+  box-shadow:0 0 50px rgba(212,175,55,0.25);
+  position:relative;
+}
+.event-block::before {
+  content:'⚡ 首場限定 · 不公開重播 ⚡';
+  position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+  background:var(--bg); color:#e63946; padding:4px 16px;
+  font-size:12px; font-weight:900; letter-spacing:3px;
+  border:1px solid #e63946; border-radius:100px;
+}
+.event-date {
+  font-family:'Noto Serif TC', serif; font-weight:900;
+  font-size:96px; line-height:1; letter-spacing:-2px;
+  background:var(--gold-gradient);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 4px 16px rgba(212,175,55,0.5));
+}
+.event-weekday { display:inline-block; padding:5px 14px; border:1px solid var(--gold-base); border-radius:6px; color:var(--gold-base); font-size:20px; font-weight:700; letter-spacing:3px; font-family:'Noto Sans TC', sans-serif; margin-bottom:8px; }
+.event-time { font-size:32px; font-weight:700; color:#fff; letter-spacing:3px; margin:0; }
+.event-duration { font-size:14px; color:rgba(245,242,237,0.65); letter-spacing:5px; margin-top:6px; }
+
+/* 動畫已移除 — 純靜態確保 100% 顯示完整 */
+</style>
+</head>
+<body>
+
+<div class="edm">
+
+  <!-- HOOK -->
+  <div class="hook">
+    <h1 class="hook-title">
+      <span class="ai-out">被 AI 淘汰</span><span class="vs"> vs </span><span class="ai-win">用 AI 月收 30 萬</span>
+    </h1>
+    <div class="hook-sub">你選哪一邊？</div>
+  </div>
+
+  <!-- Allen 主視覺（去背照）+ 名字 + 經歷 -->
+  <div class="hero-wrap">
+    <div class="allen-photo-col">
+      <img src="allen_suit.png" alt="Allen 陳柏維">
+    </div>
+    <div class="allen-info">
+      <div class="allen-name">
+        <div class="allen-name-zh">陳柏維</div>
+        <div class="allen-name-en">Allen</div>
+      </div>
+      <div class="allen-creds">
+        <div class="item">漢忻潛能培訓學院 負責人</div>
+        <div class="item">13 年業務銷售與團隊領導</div>
+        <div class="item">前大立光電 資深研發工程師</div>
+      </div>
+      <div class="slogan-block">
+          <div class="slogan-line line1">
+            彎路我都走完了，<span class="gold-strong">學費我都繳完了</span>
+          </div>
+          <div class="slogan-line">
+            最快直達的高鐵已經為你開動<br>
+            你不必再研發，<span class="gold-strong">你只要上車</span>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  
+
+  <!-- 五維變現引擎 -->
+  <div class="five-d-section">
+    <div class="five-d-title">五維變現引擎</div>
+    <div class="five-d-en">5D WEALTH ENGINE</div>
+    <div class="five-d-grid">
+      <div class="dim"><div class="dim-head"><div class="icon">🤖</div><div class="num">維度 1</div></div>
+        <div class="name">AI 智囊團<br>＋ 代理團隊</div>
+      </div>
+      <div class="dim"><div class="dim-head"><div class="icon">📱</div><div class="num">維度 2</div></div>
+        <div class="name">自媒體品牌<br>＋ 名單引擎</div>
+      </div>
+      <div class="dim"><div class="dim-head"><div class="icon">📖</div><div class="num">維度 3</div></div>
+        <div class="name">故事行銷<br>變現模板</div>
+      </div>
+      <div class="dim"><div class="dim-head"><div class="icon">💬</div><div class="num">維度 4</div></div>
+        <div class="name">銷售成交<br>SOUL 系統</div>
+      </div>
+      <div class="dim"><div class="dim-head"><div class="icon">💎</div><div class="num">維度 5</div></div>
+        <div class="name">商業模式<br>＋ 複利策略</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 為什麼是 Allen -->
+  <div class="why-allen">
+    <div class="why-allen-text">
+      五個維度，每個領域都有<b>頂尖專家</b>，但要<b>全部整合在一起</b>，且都做得好<br>
+      <b>全亞洲，只有 Allen 柏維哥做得到</b>
+    </div>
+  </div>
+
+  <!-- 中段並排：IG 圖左（320px 固定）+ 痛點右 -->
+  <div class="middle-row">
+    <div class="ig-original">
+      <div class="ig-tag-bar">IG｜4.2 萬粉絲認證</div>
+      <div class="ig-img-bg" role="img" aria-label="Allen IG 簡介 4.2 萬粉絲"></div>
+    </div>
+    <div class="pain-col">
+      <div class="pain-section">
+        <ul class="pain-list">
+          <li>你是<b>保險業務、直銷業務</b>，名單枯竭、成交率低？</li>
+          <li>你是<b>線上課程講師</b>，流量見頂、轉換不易？</li>
+          <li>你是<b>上班族</b>，想穩定增加業外收入？</li>
+        </ul>
+        <div class="pain-deal">
+          或你正在思考 ——<br>
+          用<b>自己的故事</b>打造系統化收入<br>
+          如何運用 <b>AI ／ 自媒體 ／ 成交技術</b>，打造你的智囊團與執行團隊
+        </div>
+        <div class="pain-final">把握這場培訓，你會得到所有答案</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5/14 日期框（左右並排） -->
+  <div class="event-block">
+    <div class="event-left">
+      <div class="event-date">5 / 14</div>
+    </div>
+    <div class="event-right">
+      <div class="event-weekday">週三</div>
+      <div class="event-time">20:30 — 21:30</div>
+      <div class="event-duration">60 MINUTES｜LIVE ONLINE</div>
+    </div>
+  </div>
+  </div>
+
+</body>
+</html>
